@@ -584,14 +584,41 @@ html.has-loader .loader {
 }
 
 /* ---------- Motion pre-states (only when script flagged motion) ---------- */
-html.js-motion:not(.motion-failed) [data-intro] { opacity: 0; }
-html.js-motion:not(.motion-failed) .hero .display,
-html.js-motion:not(.motion-failed) .hero .frame { visibility: hidden; }
-html.js-motion:not(.motion-failed) .hero .strands path { stroke-dasharray: 1; stroke-dashoffset: 1; }
+html.js-motion:not(.motion-failed) body[data-scenes] [data-intro] { opacity: 0; }
+html.js-motion:not(.motion-failed) body[data-scenes] .hero .display,
+html.js-motion:not(.motion-failed) body[data-scenes] .hero .frame { visibility: hidden; }
+html.js-motion:not(.motion-failed) body[data-scenes] .hero .strands path { stroke-dasharray: 1; stroke-dashoffset: 1; }
 
 @media (prefers-reduced-motion: reduce) {
   .marquee { overflow-x: auto; }
   .marquee-track { animation: none; }
   .marquee-track [aria-hidden='true'] { display: none; }
   .btn, .btn::before, .link, .nav-link { transition-duration: 1ms; }
+}
+
+/* ---------- Page transitions (Astro <ClientRouter />, native View Transitions) ---------- */
+@keyframes vt-out { to { opacity: 0; transform: translateY(-12px); } }
+@keyframes vt-wipe { from { clip-path: inset(100% 0 0 0); } to { clip-path: inset(0 0 0 0); } }
+@keyframes vt-fade-out { to { opacity: 0; } }
+@keyframes vt-fade-in { from { opacity: 0; } }
+
+/* Marketing pages: the old page fades and rises, then a coral curtain wipes away to reveal the new one. */
+::view-transition-group(root) { animation-duration: 0s; }
+html:not([data-nav='plain'])::view-transition-group(root) { background: var(--coral); }
+html:not([data-nav='plain'])::view-transition-old(root) {
+  mix-blend-mode: normal;
+  animation: vt-out 180ms var(--ease-out) both;
+}
+html:not([data-nav='plain'])::view-transition-new(root) {
+  mix-blend-mode: normal;
+  animation: vt-wipe 450ms var(--ease-in-out) 180ms both;
+}
+
+/* Working screens (/agendar, /admin) and reduced motion: a plain 150ms cross-fade. */
+html[data-nav='plain']::view-transition-old(root) { mix-blend-mode: normal; animation: vt-fade-out 150ms linear both; }
+html[data-nav='plain']::view-transition-new(root) { mix-blend-mode: normal; animation: vt-fade-in 150ms linear both; }
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(root) { background: none !important; }
+  ::view-transition-old(root) { mix-blend-mode: normal; animation: vt-fade-out 150ms linear both !important; }
+  ::view-transition-new(root) { mix-blend-mode: normal; animation: vt-fade-in 150ms linear both !important; }
 }

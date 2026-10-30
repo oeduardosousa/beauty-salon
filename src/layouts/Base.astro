@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { ClientRouter } from 'astro:transitions';
 import archivoUrl from '@fontsource-variable/archivo/files/archivo-latin-wdth-normal.woff2?url';
 
 interface Props {
@@ -25,26 +26,24 @@ const nav = [
     <meta name="theme-color" content="#F5F1E8" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preload" href={archivoUrl} as="font" type="font/woff2" crossorigin />
-    {scenes && (
-      <script is:inline>
-        (function () {
-          var d = document.documentElement;
-          var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-          if (reduce) return;
-          d.classList.add('js-motion');
-          try {
-            if (!sessionStorage.getItem('cintila-intro')) d.classList.add('has-loader');
-          } catch (e) {}
-          // Failsafe: if the motion script never runs, show everything.
-          setTimeout(function () {
-            if (!d.classList.contains('motion-ready')) {
-              d.classList.add('motion-failed');
-              d.classList.remove('has-loader');
-            }
-          }, 4000);
-        })();
-      </script>
-    )}
+    <ClientRouter />
+    <script is:inline>
+      (function () {
+        var d = document.documentElement;
+        if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        d.classList.add('js-motion');
+        try {
+          if (location.pathname === '/' && !sessionStorage.getItem('cintila-intro')) d.classList.add('has-loader');
+        } catch (e) {}
+        // Failsafe: if the motion script never runs on a scene page, show everything.
+        setTimeout(function () {
+          if (document.body && document.body.hasAttribute('data-scenes') && !d.classList.contains('motion-ready')) {
+            d.classList.add('motion-failed');
+            d.classList.remove('has-loader');
+          }
+        }, 4000);
+      })();
+    </script>
   </head>
   <body data-scenes={scenes ? '' : undefined}>
     <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
