@@ -248,10 +248,10 @@ button { font: inherit; color: inherit; cursor: pointer; }
   box-shadow: 0 0 0 3px var(--ink);
 }
 
-@media (min-width: 768px) {
+.site-header .btn { min-height: 44px; padding: 10px 24px; }
+@media (min-width: 1100px) {
   .nav-desktop { display: flex; align-items: center; gap: 24px; }
   .menu-btn { display: none; }
-  .site-header .btn { min-height: 44px; padding: 10px 24px; }
 }
 
 /* overlay menu (phones) */
@@ -290,7 +290,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   background: transparent;
   color: var(--paper);
 }
-@media (min-width: 768px) { .menu-overlay { display: none; } }
+@media (min-width: 1100px) { .menu-overlay { display: none; } }
 
 /* sticky booking button on phones */
 .sticky-cta {

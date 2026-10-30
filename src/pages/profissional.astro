@@ -1,0 +1,117 @@
+---
+import Base from '../layouts/Base.astro';
+
+// Everything below is an invented placeholder: names, services, prices and hours.
+const appointments = [
+  { id: 'a1', time: '09:00', dur: '45 min', client: 'Helena R.', service: 'Corte Claquete', price: 90, status: 'concluido' },
+  { id: 'a2', time: '10:00', dur: '3h', client: 'Beatriz M.', service: 'Luzes em Cena', price: 380, status: 'confirmado' },
+  { id: 'a3', time: '14:00', dur: '50 min', client: 'Camila T.', service: 'Hidratação Close-up', price: 110, status: 'pendente' },
+  { id: 'a4', time: '15:30', dur: '1h', client: 'Juliana A.', service: 'Penteado de Estreia', price: 120, status: 'pendente' },
+  { id: 'a5', time: '17:00', dur: '1h30', client: 'Renata P.', service: 'Raiz Perfeita', price: 160, status: 'pendente' },
+];
+const clients = [
+  { name: 'Helena R.', note: '4 visitas · corte' },
+  { name: 'Beatriz M.', note: '2 visitas · coloração' },
+  { name: 'Camila T.', note: '1 visita · tratamento' },
+];
+const days = [
+  { key: 'dom', label: 'Domingo', on: false },
+  { key: 'seg', label: 'Segunda', on: false },
+  { key: 'ter', label: 'Terça', on: true },
+  { key: 'qua', label: 'Quarta', on: true },
+  { key: 'qui', label: 'Quinta', on: true },
+  { key: 'sex', label: 'Sexta', on: true },
+  { key: 'sab', label: 'Sábado', on: true },
+];
+const statusLabel: Record<string, string> = { pendente: 'Pendente', confirmado: 'Confirmado', concluido: 'Concluído' };
+const actionLabel: Record<string, string> = { pendente: 'Confirmar', confirmado: 'Concluir', concluido: 'Reabrir' };
+---
+
+<Base
+  title="Painel da profissional · Cintila Studio"
+  description="Visão da profissional no Cintila Studio, salão fictício de portfólio: agenda do dia, clientes e disponibilidade simulados."
+  role="profissional"
+>
+  <main id="conteudo" class="app" data-pro>
+    <div class="container app-inner">
+      <header class="pro-hero">
+        <div class="pro-hero-copy">
+          <p class="label eyebrow">Painel da profissional · demonstração</p>
+          <h1 class="headline">Bom dia, <span class="serif">Marina</span></h1>
+          <p class="lead">Perfil fictício. A agenda, as clientes e os valores abaixo são exemplos para demonstrar o painel.</p>
+        </div>
+        <dl class="tiles" aria-label="Resumo do dia">
+          <div class="tile"><dt class="label">Atendimentos hoje</dt><dd data-stat="total">0</dd></div>
+          <div class="tile"><dt class="label">Confirmados</dt><dd data-stat="confirmed">0</dd></div>
+          <div class="tile"><dt class="label">Previsto (exemplo)</dt><dd data-stat="revenue">R$ 0</dd></div>
+        </dl>
+      </header>
+
+      <section class="panel panel--wide" id="agenda" aria-labelledby="agenda-title">
+        <div class="panel-head">
+          <h2 class="headline headline--sm" id="agenda-title">Agenda de <span class="serif">hoje</span></h2>
+          <button class="btn btn--secondary btn--sm" type="button" id="pro-reset">Restaurar exemplo</button>
+        </div>
+        <ul class="appts">
+          {appointments.map((a, i) => (
+            <li class="appt" data-id={a.id} data-price={a.price} data-status={a.status} data-initial={a.status} style={`--i:${i}`}>
+              <p class="appt-time">{a.time}<small class="label muted">{a.dur}</small></p>
+              <div class="appt-main">
+                <h3>{a.client}</h3>
+                <p class="muted">{a.service} · R$ {a.price} (preço de exemplo)</p>
+              </div>
+              <span class="chip" data-chip>{statusLabel[a.status]}</span>
+              <button class="btn btn--secondary btn--sm" type="button" data-act>{actionLabel[a.status]}</button>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <div class="panels">
+        <section class="panel" id="clientes" aria-labelledby="clientes-title">
+          <h2 class="headline headline--sm" id="clientes-title">Clientes <span class="serif">recentes</span></h2>
+          <ul class="clients">
+            <li class="client client--new" id="cliente-demo" hidden>
+              <div class="avatar avatar--sm" aria-hidden="true" data-demo-initial>N</div>
+              <div>
+                <h3 data-demo-name>Nova cliente</h3>
+                <p class="muted" data-demo-note>Conta de demonstração criada agora</p>
+              </div>
+              <span class="chip chip--rose">Nova</span>
+            </li>
+            {clients.map((c) => (
+              <li class="client">
+                <div class="avatar avatar--sm" aria-hidden="true">{c.name.charAt(0)}</div>
+                <div>
+                  <h3>{c.name}</h3>
+                  <p class="muted">{c.note} (exemplo)</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+          <p class="muted panel-hint">Crie uma conta na visão de cliente e ela aparece aqui como “Nova”.</p>
+        </section>
+
+        <section class="panel" id="disponibilidade" aria-labelledby="disp-title">
+          <h2 class="headline headline--sm" id="disp-title">Disponibilidade <span class="serif">da semana</span></h2>
+          <ul class="days">
+            {days.map((d) => (
+              <li class="day">
+                <span>{d.label}</span>
+                <span class="muted day-hours" data-hours>{d.on ? '9h às 19h' : 'Folga'}</span>
+                <button class="switch" type="button" role="switch" aria-checked={d.on ? 'true' : 'false'} aria-label={`Atender ${d.label.toLowerCase()}`} data-day={d.key} data-default={String(d.on)}>
+                  <span class="switch-knob"></span>
+                </button>
+              </li>
+            ))}
+          </ul>
+          <p class="muted panel-hint">Horários de exemplo. Nada é salvo fora desta aba.</p>
+        </section>
+      </div>
+    </div>
+  </main>
+</Base>
+
+<script>
+  import '../scripts/profissional.ts';
+</script>

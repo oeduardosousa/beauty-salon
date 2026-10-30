@@ -1,13 +1,20 @@
 // Always-on and tiny: menu, header state, before/after control, and page-transition wiring.
 // With <ClientRouter /> the document is swapped, not reloaded, so everything is set up on
 // `astro:page-load` and torn down on `astro:before-swap`.
+import { navigate } from 'astro:transitions/client';
+import { getRole, setRole, syncAccountLabels, type Role } from './session';
+
 const root = document.documentElement;
 
 let controller: AbortController | null = null;
 let stopMotion: (() => void) | null = null;
-let navKind: 'plain' | 'curtain' = 'curtain';
+type NavKind = 'plain' | 'curtain' | 'role-pro' | 'role-client';
+let navKind: NavKind = 'curtain';
+// Set by the role switch / gateway just before it navigates, so the next transition is the role wipe.
+let pendingSwitch: NavKind | null = null;
+const reducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-const PLAIN_ROUTES = ['/agendar', '/admin'];
+const PLAIN_ROUTES = ['/agendar', '/admin', '/conta'];
 const introSeen = () => {
   try { return !!sessionStorage.getItem('cintila-intro'); } catch { return true; }
 };
@@ -36,9 +43,32 @@ function initPage() {
     if (e.key === 'Escape' && menu?.classList.contains('is-open')) setMenu(false);
   }, { signal });
   // The menu is a phone-only overlay; close it if the viewport grows past the breakpoint.
-  matchMedia('(min-width: 768px)').addEventListener('change', (e) => {
+  matchMedia('(min-width: 1100px)').addEventListener('change', (e) => {
     if (e.matches && menu?.classList.contains('is-open')) setMenu(false);
   }, { signal });
+
+  // Role switch (Cliente / Profissional) and the gateway cards. The thumb slides first, then the page wipes.
+  syncAccountLabels();
+  document.querySelectorAll<HTMLAnchorElement>('[data-role-link]').forEach((link) => {
+    link.addEventListener('click', (e) => {
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      const target = link.dataset.roleLink as Role;
+      if (document.body.dataset.role === target) { e.preventDefault(); setMenu(false); return; }
+      setRole(target);
+      pendingSwitch = target === 'profissional' ? 'role-pro' : 'role-client';
+      if (reducedMotion()) return;
+      e.preventDefault();
+      const group = link.closest<HTMLElement>('.role-switch, .role-cards');
+      if (group) {
+        group.dataset.active = target;
+        group.classList.add('is-leaving');
+      }
+      link.setAttribute('data-chosen', '');
+      setTimeout(() => navigate(link.href), 240);
+    }, { signal });
+  });
+  const pageRole = document.body.dataset.role as Role | 'entrada';
+  if (pageRole !== 'entrada' && !getRole()) setRole(pageRole);
 
   // Header: paper background after 80px; paper text while over an ink chapter.
   const themed = [...document.querySelectorAll<HTMLElement>('[data-theme]')];
@@ -153,7 +183,12 @@ function teardownPage() {
 // Pages into the working screens (booking, admin) get a plain cross-fade; the rest get the curtain.
 document.addEventListener('astro:before-preparation', (e) => {
   const to = (e as unknown as { to: URL }).to;
-  navKind = PLAIN_ROUTES.some((r) => to.pathname.startsWith(r)) ? 'plain' : 'curtain';
+  if (pendingSwitch) {
+    navKind = pendingSwitch;
+    pendingSwitch = null;
+  } else {
+    navKind = PLAIN_ROUTES.some((r) => to.pathname.startsWith(r)) ? 'plain' : 'curtain';
+  }
   root.dataset.nav = navKind;
 });
 

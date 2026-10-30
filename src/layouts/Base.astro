@@ -1,21 +1,37 @@
 ---
 import '../styles/global.css';
+import '../styles/views.css';
 import { ClientRouter } from 'astro:transitions';
 import cormorantUrl from '@fontsource-variable/cormorant/files/cormorant-latin-wght-normal.woff2?url';
 import jostUrl from '@fontsource-variable/jost/files/jost-latin-wght-normal.woff2?url';
+import RoleSwitch from '../components/RoleSwitch.astro';
 
 interface Props {
   title: string;
   description: string;
   scenes?: boolean;
+  /** Which demo view the page belongs to. `entrada` is the "Sou cliente / Sou profissional" gateway. */
+  role?: 'cliente' | 'profissional' | 'entrada';
 }
-const { title, description, scenes = false } = Astro.props;
-const nav = [
-  { href: '/#servicos', label: 'Serviços' },
-  { href: '/#equipe', label: 'Equipe' },
-  { href: '/#galeria', label: 'Galeria' },
-  { href: '/#contato', label: 'Contato' },
-];
+const { title, description, scenes = false, role = 'cliente' } = Astro.props;
+
+const navByRole = {
+  cliente: [
+    { href: '/#servicos', label: 'Serviços' },
+    { href: '/#equipe', label: 'Equipe' },
+    { href: '/#galeria', label: 'Galeria' },
+    { href: '/#contato', label: 'Contato' },
+  ],
+  profissional: [
+    { href: '/profissional#agenda', label: 'Agenda' },
+    { href: '/profissional#clientes', label: 'Clientes' },
+    { href: '/profissional#disponibilidade', label: 'Disponibilidade' },
+  ],
+  entrada: [],
+};
+const nav = navByRole[role];
+const home = role === 'profissional' ? '/profissional' : role === 'entrada' ? '/entrar' : '/';
+const hasSwitch = role !== 'entrada';
 ---
 <!doctype html>
 <html lang="pt-BR">
@@ -31,6 +47,13 @@ const nav = [
     <ClientRouter />
     <script is:inline>
       (function () {
+        // First visit in this tab: send people to the "Sou cliente / Sou profissional" gateway.
+        try {
+          if (location.pathname.indexOf('/entrar') !== 0 && !sessionStorage.getItem('cintila-role')) {
+            location.replace('/entrar');
+            return;
+          }
+        } catch (e) {}
         var d = document.documentElement;
         if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
         d.classList.add('js-motion');
@@ -47,7 +70,7 @@ const nav = [
       })();
     </script>
   </head>
-  <body data-scenes={scenes ? '' : undefined}>
+  <body data-scenes={scenes ? '' : undefined} data-role={role}>
     <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
 
     {scenes && (
@@ -64,27 +87,43 @@ const nav = [
 
     <header class="site-header" id="site-header" data-intro>
       <div class="container">
-        <a class="wordmark" href="/" aria-label="Cintila Studio, página inicial">Cintila <span class="serif">Studio</span></a>
-        <nav class="nav-desktop label" aria-label="Principal">
-          {nav.map((l) => <a class="nav-link" href={l.href}>{l.label}</a>)}
-          <a class="btn" href="/agendar">Agendar</a>
-        </nav>
-        <button class="menu-btn label" type="button" id="menu-open" aria-expanded="false" aria-controls="menu">Menu</button>
+        <a class="wordmark" href={home} aria-label="Cintila Studio, página inicial">Cintila <span class="serif">Studio</span></a>
+        {hasSwitch && (
+          <div class="header-switch"><RoleSwitch role={role as 'cliente' | 'profissional'} /></div>
+        )}
+        {nav.length > 0 && (
+          <nav class="nav-desktop label" aria-label="Principal">
+            {nav.map((l) => <a class="nav-link" href={l.href}>{l.label}</a>)}
+            {role === 'cliente' && <a class="nav-link" href="/conta" data-account-label>Minha conta</a>}
+            {role === 'cliente' && <a class="btn" href="/agendar">Agendar</a>}
+          </nav>
+        )}
+        {nav.length > 0 && (
+          <button class="menu-btn label" type="button" id="menu-open" aria-expanded="false" aria-controls="menu">Menu</button>
+        )}
       </div>
     </header>
 
-    <div class="menu-overlay" id="menu" role="dialog" aria-modal="true" aria-label="Menu">
-      <button class="menu-close label" type="button" id="menu-close">Fechar</button>
-      <nav aria-label="Menu principal">
-        {nav.map((l) => <a href={l.href}>{l.label}</a>)}
-        <a href="/agendar">Agendar</a>
-      </nav>
-      <p class="label muted-on-ink" style="color:var(--muted-on-ink)">Salão fictício · projeto de portfólio</p>
-    </div>
+    {nav.length > 0 && (
+      <div class="menu-overlay" id="menu" role="dialog" aria-modal="true" aria-label="Menu">
+        <button class="menu-close label" type="button" id="menu-close">Fechar</button>
+        <div class="menu-body">
+          <RoleSwitch role={role as 'cliente' | 'profissional'} />
+          <nav aria-label="Menu principal">
+            {nav.map((l) => <a href={l.href}>{l.label}</a>)}
+            {role === 'cliente' && <a href="/conta" data-account-label>Minha conta</a>}
+            {role === 'cliente' && <a href="/agendar">Agendar</a>}
+          </nav>
+        </div>
+        <p class="label muted-on-ink" style="color:var(--muted-on-ink)">Salão fictício · projeto de portfólio</p>
+      </div>
+    )}
 
     <slot />
 
-    <div class="sticky-cta" id="sticky-cta"><a class="btn" href="/agendar">Agendar</a></div>
+    {role === 'cliente' && (
+      <div class="sticky-cta" id="sticky-cta"><a class="btn" href="/agendar">Agendar</a></div>
+    )}
 
     <script>
       import '../scripts/main.ts';

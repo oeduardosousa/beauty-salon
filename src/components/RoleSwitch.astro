@@ -1,0 +1,11 @@
+---
+interface Props {
+  role: 'cliente' | 'profissional';
+}
+const { role } = Astro.props;
+---
+<div class="role-switch label" role="group" aria-label="Alternar visão da demonstração" data-active={role}>
+  <span class="role-thumb" aria-hidden="true"></span>
+  <a class="role-opt" href="/" data-role-link="cliente" aria-current={role === 'cliente' ? 'page' : undefined}>Cliente</a>
+  <a class="role-opt" href="/profissional" data-role-link="profissional" aria-current={role === 'profissional' ? 'page' : undefined}>Profissional</a>
+</div>

@@ -1,0 +1,85 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+  title="Minha conta · Cintila Studio"
+  description="Crie uma conta de demonstração temporária no Cintila Studio, salão fictício de portfólio, para preparar um agendamento."
+>
+  <main id="conteudo" class="app" data-conta>
+    <div class="container app-inner">
+      <!-- Sem conta: formulário de criação -->
+      <section class="view" data-view="form" aria-labelledby="conta-criar-title" hidden>
+        <div class="app-head">
+          <p class="label eyebrow">Minha conta</p>
+          <h1 class="headline" id="conta-criar-title">Crie sua conta de <span class="serif">demonstração</span></h1>
+          <p class="lead muted">Com a conta, o seu próximo agendamento já abre com os seus dados. É uma simulação: nada é enviado e não há senha.</p>
+        </div>
+
+        <form class="form" id="conta-form" novalidate>
+          <div class="field">
+            <label for="f-nome">Nome</label>
+            <input id="f-nome" name="nome" type="text" autocomplete="name" required aria-describedby="e-nome" />
+            <p class="field-error" id="e-nome" role="alert"></p>
+          </div>
+          <div class="field">
+            <label for="f-email">E-mail</label>
+            <input id="f-email" name="email" type="email" autocomplete="email" inputmode="email" required aria-describedby="e-email" />
+            <p class="field-error" id="e-email" role="alert"></p>
+          </div>
+          <div class="field">
+            <label for="f-tel">Telefone com DDD</label>
+            <input id="f-tel" name="telefone" type="tel" autocomplete="tel-national" inputmode="tel" placeholder="(11) 90000-0000" required aria-describedby="e-tel" />
+            <p class="field-error" id="e-tel" role="alert"></p>
+          </div>
+          <div class="field field--check">
+            <input id="f-ok" name="ok" type="checkbox" required aria-describedby="e-ok" />
+            <label for="f-ok">Entendo que é uma conta temporária de demonstração, guardada só nesta aba do navegador.</label>
+            <p class="field-error" id="e-ok" role="alert"></p>
+          </div>
+          <div class="form-actions">
+            <button class="btn" type="submit">Criar conta</button>
+            <a class="btn btn--secondary" href="/">Voltar ao início</a>
+          </div>
+        </form>
+      </section>
+
+      <!-- Com conta: resumo -->
+      <section class="view" data-view="account" aria-labelledby="conta-title" hidden>
+        <div class="app-head">
+          <p class="label eyebrow" data-created role="status">Conta criada</p>
+          <h1 class="headline" id="conta-title">Olá, <span class="serif" data-name>cliente</span></h1>
+          <p class="lead muted">Sua conta de demonstração está pronta para o próximo agendamento.</p>
+        </div>
+
+        <div class="panels">
+          <section class="panel" aria-labelledby="p-dados">
+            <h2 class="label eyebrow" id="p-dados">Seus dados</h2>
+            <div class="avatar" aria-hidden="true" data-initial>C</div>
+            <dl class="data">
+              <div><dt class="label muted">Nome</dt><dd data-f="nome"></dd></div>
+              <div><dt class="label muted">E-mail</dt><dd data-f="email"></dd></div>
+              <div><dt class="label muted">Telefone</dt><dd data-f="telefone"></dd></div>
+              <div><dt class="label muted">Criada em</dt><dd data-f="criadaEm"></dd></div>
+            </dl>
+          </section>
+
+          <section class="panel" aria-labelledby="p-ag">
+            <h2 class="label eyebrow" id="p-ag">Próximos agendamentos</h2>
+            <p class="panel-empty">Nenhum agendamento ainda.</p>
+            <p class="muted">O assistente de reserva em quatro passos é a próxima etapa do projeto. Quando ele chegar, as reservas desta conta aparecem aqui.</p>
+            <div class="form-actions">
+              <a class="btn" href="/agendar">Ir para o agendamento</a>
+            </div>
+          </section>
+        </div>
+
+        <p><button class="link link-btn" type="button" id="conta-sair">Encerrar conta de demonstração</button></p>
+      </section>
+    </div>
+  </main>
+</Base>
+
+<script>
+  import '../scripts/conta.ts';
+</script>

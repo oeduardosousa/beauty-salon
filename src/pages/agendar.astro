@@ -11,7 +11,17 @@ import Base from '../layouts/Base.astro';
       <p class="label eyebrow">Agendar</p>
       <h1 class="headline">Assistente de reserva em <span class="serif">breve</span></h1>
       <p class="lead">O assistente de quatro passos (serviço, profissional, data e detalhes) é a próxima etapa do projeto. Por enquanto esta página é só o destino dos botões “Agendar”.</p>
+      <p class="muted" data-account-note>Dica: crie uma <a class="link" href="/conta">conta de demonstração</a> para deixar seus dados prontos.</p>
       <p><a class="btn btn--secondary" href="/">Voltar ao início</a></p>
     </div>
   </main>
 </Base>
+
+<script>
+  import { getAccount } from '../scripts/session';
+  document.addEventListener('astro:page-load', () => {
+    const note = document.querySelector<HTMLElement>('[data-account-note]');
+    const account = getAccount();
+    if (note && account) note.textContent = `Conta de demonstração pronta: ${account.nome} (${account.email}). Seus dados abrirão preenchidos no assistente.`;
+  });
+</script>

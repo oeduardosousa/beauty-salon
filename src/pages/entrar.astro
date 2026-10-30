@@ -1,0 +1,36 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+  title="Entrar · Cintila Studio"
+  description="Escolha como explorar a demonstração do Cintila Studio, salão fictício de portfólio: como cliente ou como profissional."
+  role="entrada"
+>
+  <main id="conteudo" class="gateway">
+    <div class="container gateway-inner">
+      <div class="gateway-head">
+        <p class="label eyebrow">Salão fictício · projeto de portfólio</p>
+        <h1 class="headline">Quem está <span class="serif">entrando?</span></h1>
+        <p class="lead muted">Duas visões do mesmo salão. Escolha uma para explorar; dá para trocar a qualquer momento pelo cabeçalho.</p>
+      </div>
+
+      <div class="role-cards" data-active="">
+        <a class="role-card role-card--client" href="/" data-role-link="cliente">
+          <span class="label role-card-tag">Visão 1</span>
+          <span class="role-card-title">Sou <span class="serif">cliente</span></span>
+          <span class="role-card-text">Conheça o salão, crie uma conta de demonstração e prepare o seu agendamento.</span>
+          <span class="role-card-go label">Entrar <span aria-hidden="true">→</span></span>
+        </a>
+        <a class="role-card role-card--pro" href="/profissional" data-role-link="profissional">
+          <span class="label role-card-tag">Visão 2</span>
+          <span class="role-card-title">Sou <span class="serif">profissional</span></span>
+          <span class="role-card-text">Veja a agenda do dia, as clientes e a disponibilidade da semana.</span>
+          <span class="role-card-go label">Entrar <span aria-hidden="true">→</span></span>
+        </a>
+      </div>
+
+      <p class="gateway-note muted">Tudo é simulado: sem senha, sem banco de dados. Os dados ficam só nesta aba do navegador e somem ao fechá-la.</p>
+    </div>
+  </main>
+</Base>
