@@ -13,7 +13,7 @@
   .menu-btn { margin-left: 0; }
   .site-header .container:has(.header-switch) {
     display: grid;
-    grid-template-columns: 1fr auto 1fr;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   }
   .site-header .container:has(.header-switch) > .wordmark { justify-self: start; }
   .site-header .container:has(.header-switch) > .menu-btn,

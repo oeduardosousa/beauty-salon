@@ -203,6 +203,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 /* Once content scrolls beneath it, an ink bar keeps the wordmark and nav legible. */
 .site-header.on-ink.is-scrolled { background: var(--ink); }
 .site-header .container {
+  max-width: calc(1720px + var(--gutter) * 2);
   height: 100%;
   display: flex;
   align-items: center;
@@ -224,6 +225,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .site-header.on-ink .wordmark .serif { color: var(--rose); }
 .nav-desktop { display: none; }
 .nav-link {
+  white-space: nowrap;
   display: inline-flex;
   align-items: center;
   min-height: 44px;
@@ -249,8 +251,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
 }
 
 .site-header .btn { min-height: 44px; padding: 10px 24px; }
-@media (min-width: 1100px) {
-  .nav-desktop { display: flex; align-items: center; gap: 24px; }
+@media (min-width: 1760px) {
+  .nav-desktop { display: flex; align-items: center; gap: 16px; }
   .menu-btn { display: none; }
 }
 
@@ -290,7 +292,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   background: transparent;
   color: var(--paper);
 }
-@media (min-width: 1100px) { .menu-overlay { display: none; } }
+@media (min-width: 1760px) { .menu-overlay { display: none; } }
 
 /* sticky booking button on phones */
 .sticky-cta {

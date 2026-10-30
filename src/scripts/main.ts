@@ -46,7 +46,7 @@ function initPage() {
     if (e.key === 'Escape' && menu?.classList.contains('is-open')) setMenu(false);
   }, { signal });
   // The menu is a phone-only overlay; close it if the viewport grows past the breakpoint.
-  matchMedia('(min-width: 1100px)').addEventListener('change', (e) => {
+  matchMedia('(min-width: 1760px)').addEventListener('change', (e) => {
     if (e.matches && menu?.classList.contains('is-open')) setMenu(false);
   }, { signal });
 
