@@ -229,3 +229,16 @@ html[data-nav='role-client']::view-transition-new(root) { mix-blend-mode: normal
   html[data-nav^='role']::view-transition-old(root) { animation: vt-fade-out 150ms linear both !important; }
   html[data-nav^='role']::view-transition-new(root) { animation: vt-fade-in 150ms linear both !important; }
 }
+
+/* ---------- Professional nav: active link, arrival pulse, entrance ---------- */
+.nav-link.is-active { background-size: 100% 2px; }
+.panel.is-arrived { animation: arrive 1000ms var(--ease-out); }
+@keyframes arrive {
+  0% { box-shadow: 0 0 0 0 var(--rose); }
+  35% { box-shadow: 0 0 0 6px var(--rose); }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .rv { opacity: 0; transform: translateY(16px); transition: opacity 520ms var(--ease-out), transform 520ms var(--ease-out); transition-delay: calc(var(--rv, 0) * 70ms); }
+  .rv.is-in { opacity: 1; transform: none; }
+}
