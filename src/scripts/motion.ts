@@ -119,10 +119,10 @@ export async function initMotion(): Promise<() => void> {
     if (manifesto && text) {
       gsap.fromTo(
         manifesto,
-        { backgroundColor: '#F5F1E8', color: '#16150F' },
+        { backgroundColor: '#FFF5F3', color: '#2B0E26' },
         {
-          backgroundColor: '#16150F',
-          color: '#F5F1E8',
+          backgroundColor: '#2B0E26',
+          color: '#FFF5F3',
           ease: 'none',
           scrollTrigger: { trigger: manifesto, start: 'top 80%', end: () => `+=${innerHeight * 0.4}`, scrub: true },
         },
