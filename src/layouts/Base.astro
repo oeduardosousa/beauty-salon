@@ -1,0 +1,92 @@
+---
+import '../styles/global.css';
+import archivoUrl from '@fontsource-variable/archivo/files/archivo-latin-wdth-normal.woff2?url';
+
+interface Props {
+  title: string;
+  description: string;
+  scenes?: boolean;
+}
+const { title, description, scenes = false } = Astro.props;
+const nav = [
+  { href: '/#servicos', label: 'Serviços' },
+  { href: '/#equipe', label: 'Equipe' },
+  { href: '/#galeria', label: 'Galeria' },
+  { href: '/#contato', label: 'Contato' },
+];
+---
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#F5F1E8" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" href={archivoUrl} as="font" type="font/woff2" crossorigin />
+    {scenes && (
+      <script is:inline>
+        (function () {
+          var d = document.documentElement;
+          var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+          if (reduce) return;
+          d.classList.add('js-motion');
+          try {
+            if (!sessionStorage.getItem('cintila-intro')) d.classList.add('has-loader');
+          } catch (e) {}
+          // Failsafe: if the motion script never runs, show everything.
+          setTimeout(function () {
+            if (!d.classList.contains('motion-ready')) {
+              d.classList.add('motion-failed');
+              d.classList.remove('has-loader');
+            }
+          }, 4000);
+        })();
+      </script>
+    )}
+  </head>
+  <body data-scenes={scenes ? '' : undefined}>
+    <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
+
+    {scenes && (
+      <div class="loader" aria-hidden="true">
+        <div class="loader-inner">
+          <div class="loader-count" id="loader-count">000</div>
+          <div class="loader-blocks" id="loader-blocks">
+            {Array.from({ length: 10 }).map(() => <i />)}
+          </div>
+        </div>
+      </div>
+    )}
+    <div class="cursor" aria-hidden="true"></div>
+
+    <header class="site-header" id="site-header" data-intro>
+      <div class="container">
+        <a class="wordmark" href="/" aria-label="Ateliê Cintila, página inicial">Ateliê <span class="serif">Cintila</span></a>
+        <nav class="nav-desktop label" aria-label="Principal">
+          {nav.map((l) => <a class="nav-link" href={l.href}>{l.label}</a>)}
+          <a class="btn" href="/agendar">Agendar</a>
+        </nav>
+        <button class="menu-btn label" type="button" id="menu-open" aria-expanded="false" aria-controls="menu">Menu</button>
+      </div>
+    </header>
+
+    <div class="menu-overlay" id="menu" role="dialog" aria-modal="true" aria-label="Menu">
+      <button class="menu-close label" type="button" id="menu-close">Fechar</button>
+      <nav aria-label="Menu principal">
+        {nav.map((l) => <a href={l.href}>{l.label}</a>)}
+        <a href="/agendar">Agendar</a>
+      </nav>
+      <p class="label muted-on-ink" style="color:var(--muted-on-ink)">Salão fictício · projeto de portfólio</p>
+    </div>
+
+    <slot />
+
+    <div class="sticky-cta" id="sticky-cta"><a class="btn" href="/agendar">Agendar</a></div>
+
+    <script>
+      import '../scripts/main.ts';
+    </script>
+  </body>
+</html>

@@ -1,0 +1,11 @@
+---
+// Decorative strand lines: parallel hair-like curves, drawn in on scroll.
+const count = 7;
+const paths = Array.from({ length: count }, (_, i) => {
+  const o = i * 34;
+  return `M-40 ${180 + o} C 260 ${40 + o}, 520 ${420 + o}, 820 ${240 + o} S 1180 ${60 + o}, 1480 ${220 + o}`;
+});
+---
+<svg class="strands" viewBox="0 0 1440 700" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+  {paths.map((d) => <path d={d} pathLength="1" />)}
+</svg>

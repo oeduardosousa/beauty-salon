@@ -1,0 +1,29 @@
+---
+interface Props {
+  variant?: 'a' | 'b' | 'c' | 'd';
+  alt: string;
+  caption?: boolean;
+}
+const { variant = 'a', alt, caption = true } = Astro.props;
+const palettes = {
+  a: { bg: '#24231B', s1: '#FF5B3A', s2: '#F5F1E8' },
+  b: { bg: '#FF5B3A', s1: '#16150F', s2: '#F5F1E8' },
+  c: { bg: '#D6CFBE', s1: '#16150F', s2: '#FF5B3A' },
+  d: { bg: '#16150F', s1: '#F5F1E8', s2: '#FF5B3A' },
+};
+const p = palettes[variant];
+---
+<figure class="frame" data-cursor="ver">
+  <div class="img-inner" data-parallax>
+    <svg viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice" role="img" aria-label={`Imagem ilustrativa: ${alt}`}>
+      <rect width="400" height="500" fill={p.bg} />
+      <g fill="none" stroke-linecap="round">
+        <path d="M-20 420 C 80 300, 160 520, 260 330 S 380 200, 430 120" stroke={p.s1} stroke-width="46" />
+        <path d="M-20 470 C 90 360, 170 560, 270 380 S 390 260, 430 190" stroke={p.s2} stroke-width="14" />
+        <path d="M-20 360 C 70 250, 150 440, 250 270 S 370 150, 430 70" stroke={p.s2} stroke-width="5" />
+      </g>
+      <circle cx="300" cy="110" r="46" fill={p.s2} />
+    </svg>
+  </div>
+  {caption && <figcaption class="tag-ph">Imagem ilustrativa</figcaption>}
+</figure>

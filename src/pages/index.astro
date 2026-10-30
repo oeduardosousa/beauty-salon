@@ -1,0 +1,220 @@
+---
+import Base from '../layouts/Base.astro';
+import Placeholder from '../components/Placeholder.astro';
+import Strands from '../components/Strands.astro';
+
+// All services, prices, people and quotes below are invented placeholders.
+const services = [
+  { cat: 'Corte', name: 'Corte Claquete', time: '45 min', price: 'R$ 90' },
+  { cat: 'Corte', name: 'Take Um: corte e escova', time: '1h15', price: 'R$ 140' },
+  { cat: 'Cor', name: 'Luzes em Cena', time: '3h', price: 'R$ 380' },
+  { cat: 'Cor', name: 'Raiz Perfeita', time: '1h30', price: 'R$ 160' },
+  { cat: 'Tratamento', name: 'Hidratação Close-up', time: '50 min', price: 'R$ 110' },
+  { cat: 'Penteado', name: 'Penteado de Estreia', time: '1h', price: 'R$ 120' },
+];
+const team = [
+  { name: 'Marina', role: 'Corte e coloração', days: 'Ter a sáb', variant: 'a' as const, speed: '0.85' },
+  { name: 'Caio', role: 'Cortes curtos e texturas', days: 'Qua a dom', variant: 'c' as const, speed: '1' },
+  { name: 'Lívia', role: 'Penteados e tratamentos', days: 'Seg a sex', variant: 'b' as const, speed: '1.15' },
+];
+const quotes = [
+  'Saí com o cabelo que eu tinha na cabeça, só que melhor.',
+  'Me explicaram cada passo antes de cortar. Dá confiança.',
+  'A cor ficou natural e a hidratação durou semanas.',
+  'Marquei em poucos toques e fui atendida na hora.',
+  'Um corte com cara de cena final de filme.',
+];
+---
+
+<Base
+  title="Ateliê Cintila: salão fictício de portfólio"
+  description="Ateliê Cintila é um salão fictício criado como projeto de portfólio. Corte, cor e cuidado, com agendamento em quatro passos simulados."
+  scenes
+>
+  <main id="conteudo">
+    <!-- 1. Abertura -->
+    <section class="hero" data-theme="paper" aria-labelledby="hero-title">
+      <Strands />
+      <div class="container">
+        <div class="hero-copy">
+          <p class="label eyebrow" data-intro>Salão fictício · projeto de portfólio</p>
+          <h1 class="display" id="hero-title">
+            <span class="line"><span class="line-inner">O seu</span></span>
+            <span class="line"><span class="line-inner"><span class="serif">cabelo,</span></span></span>
+            <span class="line"><span class="line-inner">em cena.</span></span>
+          </h1>
+          <p class="lead hero-note" data-intro>
+            Corte, cor e cuidado no Ateliê Cintila. Escolha o serviço, a profissional e o horário em quatro passos.
+          </p>
+          <div class="hero-actions" data-intro>
+            <a class="btn" href="/agendar" data-magnetic>Agendar</a>
+            <a class="btn btn--secondary" href="#servicos" data-magnetic>Ver serviços</a>
+          </div>
+        </div>
+        <div class="hero-media frame-wrap">
+          <Placeholder variant="a" alt="cabelo em movimento, em cores de cena" />
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Manifesto -->
+    <section class="chapter chapter--ink manifesto" id="manifesto" data-theme="ink" aria-label="Manifesto">
+      <div class="container">
+        <p id="manifesto-text">
+          Cada corte é uma cena. Cada cor, um enquadramento. Aqui o seu cabelo é o <span class="hl">protagonista</span> e a nossa equipe cuida da edição.
+        </p>
+      </div>
+    </section>
+
+    <!-- 3. Serviços -->
+    <section class="chapter chapter--ink" id="servicos" data-theme="ink" aria-labelledby="servicos-title" style="padding-top:0">
+      <Strands />
+      <div class="container">
+        <div class="chapter-head">
+          <div class="services-meta">
+            <p class="label eyebrow">Serviços</p>
+            <p class="label counter" id="services-counter" aria-hidden="true">Corte</p>
+          </div>
+          <h2 class="headline" id="servicos-title">Do corte ao <span class="serif">retoque</span></h2>
+          <p class="lead muted">Nomes, durações e preços de exemplo, só para demonstrar o cardápio. Nada aqui é uma oferta real.</p>
+        </div>
+      </div>
+      <div class="services-viewport" id="services-viewport">
+        <div class="container">
+          <ul class="track" id="services-track">
+            {services.map((s) => (
+              <li class="card" data-cat={s.cat}>
+                <p class="label cat">{s.cat}</p>
+                <h3>{s.name}</h3>
+                <dl>
+                  <div><dt class="label muted">Duração</dt><dd>{s.time}</dd></div>
+                  <div><dt class="sr-only" style="position:absolute;left:-9999px">Preço</dt><dd class="price">{s.price}<small>preço de exemplo</small></dd></div>
+                </dl>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      <div class="container" style="margin-top:48px">
+        <a class="btn" href="/agendar" data-magnetic>Agendar um serviço</a>
+      </div>
+    </section>
+
+    <!-- 4. Equipe -->
+    <section class="chapter" id="equipe" data-theme="paper" aria-labelledby="equipe-title">
+      <div class="container">
+        <div class="chapter-head">
+          <p class="label eyebrow">Equipe</p>
+          <h2 class="headline" id="equipe-title">Quem cuida do <span class="serif">seu</span> cabelo</h2>
+          <p class="lead muted">Perfis fictícios, com especialidades e dias de atendimento de exemplo.</p>
+        </div>
+        <ul class="team">
+          {team.map((p) => (
+            <li class="person" data-speed={p.speed}>
+              <Placeholder variant={p.variant} alt={`retrato da equipe, ${p.name}`} />
+              <h3 class="serif">{p.name}</h3>
+              <ul>
+                <li>{p.role}</li>
+                <li class="muted">{p.days} (horário de exemplo)</li>
+              </ul>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <!-- 5. Antes e depois -->
+    <section class="chapter chapter--ink" id="galeria" data-theme="ink" aria-labelledby="galeria-title">
+      <div class="container compare" id="compare">
+        <div class="chapter-head" style="margin-bottom:0">
+          <p class="label eyebrow">Antes e depois</p>
+          <h2 class="headline" id="galeria-title">A virada de <span class="serif">cena</span></h2>
+          <p class="lead muted">Imagens ilustrativas. Arraste o controle para comparar; no computador, a rolagem também move a comparação.</p>
+        </div>
+        <div class="compare-stage" id="compare-stage">
+          <div class="layer before"><Placeholder variant="c" alt="antes: cabelo sem corte definido" caption={false} /></div>
+          <div class="layer after"><Placeholder variant="b" alt="depois: cabelo com corte e cor" caption={false} /></div>
+          <div class="divider" aria-hidden="true"></div>
+          <span class="tag-ph" style="position:absolute;left:8px;bottom:8px">Imagem ilustrativa</span>
+        </div>
+        <div class="compare-tags label" aria-hidden="true"><span>Antes</span><span>Depois</span></div>
+        <label>
+          <span class="label">Comparar antes e depois</span>
+          <input type="range" min="0" max="100" value="50" id="compare-range" />
+        </label>
+      </div>
+    </section>
+
+    <!-- 6. Opiniões -->
+    <section class="chapter" id="opinioes" data-theme="paper" aria-labelledby="opinioes-title">
+      <div class="container">
+        <div class="chapter-head">
+          <p class="label eyebrow">Opiniões</p>
+          <h2 class="headline" id="opinioes-title">O que <span class="serif">dizem</span></h2>
+          <p class="lead muted">Frases de exemplo escritas para o protótipo. Não são avaliações de clientes reais.</p>
+        </div>
+      </div>
+      <div class="marquee" tabindex="0" role="region" aria-label="Opiniões de exemplo">
+        <ul class="marquee-track">
+          {quotes.map((q) => (
+            <li class="quote">
+              <blockquote>{q}</blockquote>
+              <p class="label muted">Opinião de exemplo</p>
+            </li>
+          ))}
+          {quotes.map((q) => (
+            <li class="quote" aria-hidden="true">
+              <blockquote>{q}</blockquote>
+              <p class="label muted">Opinião de exemplo</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <!-- 7. Agendar -->
+    <section class="band" data-theme="coral" aria-labelledby="agendar-title">
+      <div class="container">
+        <p class="label">Quatro passos: serviço, profissional, data e detalhes</p>
+        <h2 id="agendar-title" style="margin:0">
+          <a class="band-link" href="/agendar" data-magnetic>Agendar<span class="serif">.</span></a>
+        </h2>
+        <a class="btn" href="/agendar" data-magnetic>Começar a reserva</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="contato" data-theme="ink">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <h2 class="label">Contato</h2>
+          <p>Rua Exemplo, 000<br />Cidade Fictícia</p>
+          <p class="muted">Endereço e telefone fictícios.</p>
+          <p class="muted">Mapa: indisponível na demonstração.</p>
+        </div>
+        <div>
+          <h2 class="label">Horários</h2>
+          <ul>
+            <li>Terça a sábado, 9h às 19h</li>
+            <li>Domingo e segunda: fechado</li>
+          </ul>
+          <p class="muted">Horários de exemplo.</p>
+        </div>
+        <div>
+          <h2 class="label">Explore</h2>
+          <ul>
+            <li><a class="nav-link" href="#servicos">Serviços</a></li>
+            <li><a class="nav-link" href="#equipe">Equipe</a></li>
+            <li><a class="nav-link" href="#galeria">Galeria</a></li>
+            <li><a class="nav-link" href="/agendar">Agendar</a></li>
+          </ul>
+        </div>
+      </div>
+      <p class="footer-demo">
+        Este site é uma demonstração de portfólio. O Ateliê Cintila não existe: nomes, preços, equipe, imagens e opiniões são inventados, e as reservas são simuladas.
+      </p>
+      <p class="giant" aria-hidden="true">Ateliê Cintila</p>
+    </div>
+  </footer>
+</Base>
