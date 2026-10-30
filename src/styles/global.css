@@ -359,20 +359,12 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .hero .container { display: grid; gap: 32px; }
 .hero-copy { display: grid; gap: 24px; align-content: end; position: relative; z-index: 2; }
 .hero-actions { display: flex; flex-wrap: wrap; gap: 16px; }
-.hero-media { aspect-ratio: 4 / 3; max-height: 40svh; width: 100%; }
+.hero-media { width: 100%; }
 .hero-note { max-width: 40ch; }
 @media (min-width: 1024px) {
   .hero .container { grid-template-columns: repeat(12, 1fr); align-items: end; }
   .hero-copy { grid-column: 1 / span 9; grid-row: 1; }
-  .hero-media {
-    grid-column: 9 / span 4;
-    grid-row: 1;
-    aspect-ratio: 3 / 4;
-    max-height: none;
-    height: 62svh;
-    align-self: start;
-    margin-top: 24px;
-  }
+  .hero-media { grid-column: 7 / span 6; grid-row: 1; align-self: center; }
 }
 
 /* ---------- Manifesto ---------- */
@@ -431,8 +423,8 @@ html:not(.js-motion) .hl { color: var(--ink); }
 }
 @media (min-width: 1024px) {
   .track { grid-template-columns: repeat(3, 1fr); }
-  .track.is-pinned { display: flex; width: max-content; gap: 24px; }
-  .track.is-pinned .card { width: 380px; min-height: 340px; flex: none; }
+  .track.is-drift { display: flex; width: max-content; gap: 24px; will-change: transform; }
+  .track.is-drift .card { width: 380px; min-height: 340px; flex: none; }
 }
 .services-viewport { overflow: clip; }
 
@@ -450,13 +442,22 @@ html:not(.js-motion) .hl { color: var(--ink); }
 
 /* ---------- Before / after ---------- */
 .compare { display: grid; gap: 24px; }
+.compare-info, .compare-view { display: grid; gap: 24px; align-content: start; }
+.compare-view { gap: 12px; }
+@media (min-width: 1024px) {
+  /* Heading and stage sit side by side so the whole picture fits one screen. */
+  .compare { grid-template-columns: 5fr 7fr; gap: 64px; align-items: center; }
+}
 .compare-stage {
   --pos: 50;
   position: relative;
   aspect-ratio: 4 / 3;
-  max-height: 70svh;
+  max-height: 72svh;
   overflow: clip;
   border-radius: var(--radius-soft);
+  cursor: ew-resize;
+  touch-action: pan-y;
+  user-select: none;
 }
 .compare-stage .layer { position: absolute; inset: 0; }
 .compare-stage .layer svg { width: 100%; height: 100%; }

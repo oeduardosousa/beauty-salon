@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Placeholder from '../components/Placeholder.astro';
 import Strands from '../components/Strands.astro';
+import HeroScene from '../components/HeroScene.astro';
 
 // All services, prices, people and quotes below are invented placeholders.
 const services = [
@@ -27,8 +28,8 @@ const quotes = [
 ---
 
 <Base
-  title="Ateliê Cintila: salão fictício de portfólio"
-  description="Ateliê Cintila é um salão fictício criado como projeto de portfólio. Corte, cor e cuidado, com agendamento em quatro passos simulados."
+  title="Cintila Studio: salão fictício de portfólio"
+  description="Cintila Studio é um salão fictício criado como projeto de portfólio. Corte, cor e cuidado, com agendamento em quatro passos simulados."
   scenes
 >
   <main id="conteudo">
@@ -44,15 +45,15 @@ const quotes = [
             <span class="line"><span class="line-inner">em cena.</span></span>
           </h1>
           <p class="lead hero-note" data-intro>
-            Corte, cor e cuidado no Ateliê Cintila. Escolha o serviço, a profissional e o horário em quatro passos.
+            Corte, cor e cuidado no Cintila Studio. Escolha o serviço, a profissional e o horário em quatro passos.
           </p>
           <div class="hero-actions" data-intro>
             <a class="btn" href="/agendar" data-magnetic>Agendar</a>
             <a class="btn btn--secondary" href="#servicos" data-magnetic>Ver serviços</a>
           </div>
         </div>
-        <div class="hero-media frame-wrap">
-          <Placeholder variant="a" alt="cabelo em movimento, em cores de cena" />
+        <div class="hero-media">
+          <HeroScene />
         </div>
       </div>
     </section>
@@ -126,22 +127,26 @@ const quotes = [
     <!-- 5. Antes e depois -->
     <section class="chapter chapter--ink" id="galeria" data-theme="ink" aria-labelledby="galeria-title">
       <div class="container compare" id="compare">
-        <div class="chapter-head" style="margin-bottom:0">
-          <p class="label eyebrow">Antes e depois</p>
-          <h2 class="headline" id="galeria-title">A virada de <span class="serif">cena</span></h2>
-          <p class="lead muted">Imagens ilustrativas. Arraste o controle para comparar; no computador, a rolagem também move a comparação.</p>
+        <div class="compare-info">
+          <div class="chapter-head" style="margin-bottom:0">
+            <p class="label eyebrow">Antes e depois</p>
+            <h2 class="headline" id="galeria-title">A virada de <span class="serif">cena</span></h2>
+            <p class="lead muted">Imagens ilustrativas. Arraste a imagem ou use o controle para comparar; a rolagem também move a comparação.</p>
+          </div>
+          <label>
+            <span class="label">Comparar antes e depois</span>
+            <input type="range" min="0" max="100" value="50" id="compare-range" />
+          </label>
         </div>
-        <div class="compare-stage" id="compare-stage">
-          <div class="layer before"><Placeholder variant="c" alt="antes: cabelo sem corte definido" caption={false} /></div>
-          <div class="layer after"><Placeholder variant="b" alt="depois: cabelo com corte e cor" caption={false} /></div>
-          <div class="divider" aria-hidden="true"></div>
-          <span class="tag-ph" style="position:absolute;left:8px;bottom:8px">Imagem ilustrativa</span>
+        <div class="compare-view">
+          <div class="compare-stage" id="compare-stage">
+            <div class="layer before"><Placeholder variant="c" alt="antes: cabelo sem corte definido" caption={false} /></div>
+            <div class="layer after"><Placeholder variant="b" alt="depois: cabelo com corte e cor" caption={false} /></div>
+            <div class="divider" aria-hidden="true"></div>
+            <span class="tag-ph" style="position:absolute;left:8px;bottom:8px">Imagem ilustrativa</span>
+          </div>
+          <div class="compare-tags label" aria-hidden="true"><span>Antes</span><span>Depois</span></div>
         </div>
-        <div class="compare-tags label" aria-hidden="true"><span>Antes</span><span>Depois</span></div>
-        <label>
-          <span class="label">Comparar antes e depois</span>
-          <input type="range" min="0" max="100" value="50" id="compare-range" />
-        </label>
       </div>
     </section>
 
@@ -212,9 +217,9 @@ const quotes = [
         </div>
       </div>
       <p class="footer-demo">
-        Este site é uma demonstração de portfólio. O Ateliê Cintila não existe: nomes, preços, equipe, imagens e opiniões são inventados, e as reservas são simuladas.
+        Este site é uma demonstração de portfólio. O Cintila Studio não existe: nomes, preços, equipe, imagens e opiniões são inventados, e as reservas são simuladas.
       </p>
-      <p class="giant" aria-hidden="true">Ateliê Cintila</p>
+      <p class="giant" aria-hidden="true">Cintila Studio</p>
     </div>
   </footer>
 </Base>

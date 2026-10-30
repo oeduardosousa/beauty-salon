@@ -1,5 +1,5 @@
 ---
-name: Ateliê Cintila
+name: Cintila Studio
 description: Um salão editorial e cinematográfico na vitrine, com a marcação como um assistente de instalação em cinza de sistema.
 colors:
   paper: "#FFF5F3"
@@ -151,7 +151,7 @@ components:
 
 <!-- SEED: established with the user before implementation. No code exists yet. Re-run `/impeccable document` once there is code, so the real tokens and the .impeccable/design.json sidecar can be extracted. Every value above is a decision, not an observation. -->
 
-# Design System: Ateliê Cintila
+# Design System: Cintila Studio
 
 ## Overview
 

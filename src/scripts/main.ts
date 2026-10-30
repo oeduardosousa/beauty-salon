@@ -60,6 +60,28 @@ function initPage() {
   const stage = document.getElementById('compare-stage');
   const range = document.getElementById('compare-range') as HTMLInputElement | null;
   range?.addEventListener('input', () => stage?.style.setProperty('--pos', range.value), { signal });
+  // Dragging the picture itself also moves the divider.
+  if (stage && range) {
+    const setFromPointer = (e: PointerEvent) => {
+      const r = stage.getBoundingClientRect();
+      const v = Math.min(100, Math.max(0, ((e.clientX - r.left) / r.width) * 100));
+      stage.style.setProperty('--pos', v.toFixed(1));
+      range.value = String(Math.round(v));
+    };
+    stage.addEventListener('pointerdown', (e) => {
+      stage.setPointerCapture(e.pointerId);
+      setFromPointer(e);
+      const move = (ev: PointerEvent) => setFromPointer(ev);
+      const up = () => {
+        stage.removeEventListener('pointermove', move);
+        stage.removeEventListener('pointerup', up);
+        stage.removeEventListener('pointercancel', up);
+      };
+      stage.addEventListener('pointermove', move);
+      stage.addEventListener('pointerup', up);
+      stage.addEventListener('pointercancel', up);
+    }, { signal });
+  }
 
   // Hide the phone booking button while the booking band is on screen.
   const sticky = document.getElementById('sticky-cta');

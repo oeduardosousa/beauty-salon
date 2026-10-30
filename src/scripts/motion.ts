@@ -47,7 +47,9 @@ export async function initMotion(): Promise<() => void> {
     const tl = gsap.timeline({ defaults: { ease: EASE_OUT } });
     tl.to('.hero .strands path', { strokeDashoffset: 0, duration: 1.6, stagger: 0.06 }, 0)
       .to('.hero .line-inner', { yPercent: 0, duration: 0.8, stagger: 0.07 }, 0.1)
-      .to('.hero .frame .img-inner', { scale: 1, duration: 1.4 }, 0.2)
+      .to('.hero-scene', { opacity: 1, scale: 1, duration: 1.2 }, 0.2)
+      .from('.hero-scene .petal i', { scaleY: 0, scaleX: 0.3, duration: 1.3, stagger: { each: 0.035, from: 'end' } }, 0.3)
+      .from('.hero-scene .prop, .hero-scene .spark', { scale: 0, duration: 0.9, stagger: 0.06, ease: 'back.out(1.6)' }, 0.8)
       .to('.hero [data-intro]', { opacity: 1, y: 0, duration: 0.5, stagger: 0.08 }, 0.4)
       .to('#site-header', { opacity: 1, duration: 0.24 }, 0.9);
     return tl;
@@ -181,13 +183,14 @@ export async function initMotion(): Promise<() => void> {
       });
     });
 
-    // Services: horizontal pinned track on desktop only.
+    // Services: on desktop the cards drift sideways while the section scrolls past.
+    // Nothing is pinned, so vertical scrolling never stalls.
     mm.add('(min-width: 1024px)', () => {
       const track = q('#services-track')!;
       const section = q('#servicos')!;
       const counter = q('#services-counter')!;
       const cards = qa('.card', track);
-      track.classList.add('is-pinned');
+      track.classList.add('is-drift');
       const dist = () => {
         const view = track.parentElement!;
         const pad = parseFloat(getComputedStyle(view).paddingLeft) * 2;
@@ -198,11 +201,9 @@ export async function initMotion(): Promise<() => void> {
         ease: 'none',
         scrollTrigger: {
           trigger: section,
-          start: 'top top',
-          end: () => `+=${dist()}`,
-          pin: true,
-          anticipatePin: 1,
-          scrub: 1,
+          start: 'top 75%',
+          end: 'bottom 60%',
+          scrub: 0.6,
           invalidateOnRefresh: true,
           onUpdate(self) {
             const i = Math.min(cards.length - 1, Math.floor(self.progress * cards.length));
@@ -212,31 +213,29 @@ export async function initMotion(): Promise<() => void> {
         },
       });
       return () => {
-        track.classList.remove('is-pinned');
+        track.classList.remove('is-drift');
         tween.kill();
         gsap.set(track, { clearProps: 'transform' });
       };
     });
 
-    // Before/after: pinned for ~100vh on desktop; scroll drives the reveal.
-    mm.add('(min-width: 1024px)', () => {
-      const stage = q('#compare-stage')!;
-      const rangeEl = q<HTMLInputElement>('#compare-range')!;
-      const st = ScrollTrigger.create({
-        trigger: '#galeria',
-        start: 'top top',
-        end: () => `+=${innerHeight}`,
-        pin: true,
-        anticipatePin: 1,
-        scrub: true,
-        onUpdate(self) {
-          const v = Math.round(100 - self.progress * 100);
-          stage.style.setProperty('--pos', String(v));
-          rangeEl.value = String(v);
-        },
-      });
-      return () => st.kill();
-    });
+    // Before/after: the divider sweeps as the stage scrolls through the screen. Not pinned.
+    {
+      const stage = q('#compare-stage');
+      const rangeEl = q<HTMLInputElement>('#compare-range');
+      if (stage && rangeEl) {
+        const pos = { v: 100 };
+        gsap.to(pos, {
+          v: 0,
+          ease: 'none',
+          onUpdate: () => {
+            stage.style.setProperty('--pos', pos.v.toFixed(1));
+            rangeEl.value = String(Math.round(pos.v));
+          },
+          scrollTrigger: { trigger: stage, start: 'top 75%', end: 'bottom 35%', scrub: 0.6 },
+        });
+      }
+    }
 
     gsap.from('.band-link', {
       yPercent: 25,
@@ -252,6 +251,16 @@ export async function initMotion(): Promise<() => void> {
     if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
     const dot = q('.cursor');
     if (!dot) return;
+    // 3D hero scene: ease toward the pointer so the depth layers shift against each other.
+    const tilt = q('[data-scene-tilt]');
+    if (tilt) {
+      const rx = gsap.quickTo(tilt, 'rotationX', { duration: 0.9, ease: 'power3' });
+      const ry = gsap.quickTo(tilt, 'rotationY', { duration: 0.9, ease: 'power3' });
+      addEventListener('pointermove', (e) => {
+        ry((e.clientX / innerWidth - 0.5) * 22);
+        rx((0.5 - e.clientY / innerHeight) * 14);
+      }, { signal });
+    }
     root.classList.add('cursor-on');
     const x = gsap.quickTo(dot, 'x', { duration: 0.35, ease: 'power3' });
     const y = gsap.quickTo(dot, 'y', { duration: 0.35, ease: 'power3' });
@@ -298,8 +307,8 @@ export async function initMotion(): Promise<() => void> {
   // The hero is fully rendered beneath the loader, so the loader never delays paint.
   gsap.set('.hero [data-intro]', { y: 8 });
   gsap.set('.hero .line-inner', { yPercent: 110 });
-  gsap.set('.hero .frame .img-inner', { scale: 1.12 });
-  gsap.set('.hero .display, .hero .frame', { visibility: 'visible' });
+  gsap.set('.hero-scene', { opacity: 0, scale: 0.92 });
+  gsap.set('.hero .display', { visibility: 'visible' });
   await runLoader();
   if (signal.aborted) return destroy;
   ctx.add(() => {
