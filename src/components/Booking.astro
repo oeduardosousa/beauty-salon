@@ -6,34 +6,19 @@ import { services, team } from '../data/salon';
 ---
 
 <div class="booking" data-booking>
-    <div class="dialog" role="group" aria-labelledby="bk-title" data-dialog>
-      <div class="dialog-titlebar">
-        <span id="bk-title">Assistente de reserva</span>
-        <span data-step-count>Passo 1 de 4</span>
+    <div class="dialog" role="group" aria-label="Assistente de reserva" data-dialog>
+      <div class="dialog-top">
+        <ol class="stepper" data-stepper>
+          {['Serviço', 'Profissional', 'Horário', 'Detalhes'].map((t, i) => (
+            <li class="stepper-item" data-stepper-item><span class="stepper-dot" aria-hidden="true">{i + 1}</span><span class="stepper-label">{t}</span></li>
+          ))}
+        </ol>
+        <div class="stepper-track" aria-hidden="true"><i data-track></i></div>
+        <p class="picks" data-picks aria-live="polite" hidden></p>
+        <span class="visually-hidden" data-step-count>Passo 1 de 4</span>
       </div>
 
-      <div class="dialog-body">
-        <svg class="dialog-banner" viewBox="0 0 120 400" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-          <defs>
-            <pattern id="bk-dither" width="4" height="4" patternUnits="userSpaceOnUse">
-              <rect width="2" height="2" fill="#2B0E26" />
-              <rect x="2" y="2" width="2" height="2" fill="#2B0E26" />
-            </pattern>
-          </defs>
-          <rect width="120" height="400" fill="#FFF5F3" />
-          <rect y="120" width="120" height="160" fill="#F46FA1" />
-          <rect y="280" width="120" height="120" fill="#2B0E26" />
-          <rect y="100" width="120" height="20" fill="url(#bk-dither)" />
-          <rect y="260" width="120" height="20" fill="url(#bk-dither)" />
-        </svg>
-
-        <div class="dialog-main">
-          <div class="blocks" data-blocks role="img" aria-label="Progresso: passo 1 de 4">
-            {Array.from({ length: 10 }).map(() => <i />)}
-          </div>
-
-          <noscript><p class="dialog-note">O assistente de reserva precisa de JavaScript para funcionar.</p></noscript>
-
+      <div class="dialog-main">
           <form class="wizard" data-form novalidate>
             <!-- Passo 1: serviço -->
             <fieldset class="step" data-step="1">
@@ -110,8 +95,8 @@ import { services, team } from '../data/salon';
 
           <!-- Instalando… -->
           <div class="installing" data-installing hidden>
-            <p class="step-title">Instalando…</p>
-            <div class="blocks blocks--run" data-run aria-hidden="true">
+            <p class="step-title">Confirmando a sua reserva…</p>
+            <div class="bar" aria-hidden="true">
               {Array.from({ length: 10 }).map(() => <i />)}
             </div>
           </div>
@@ -121,13 +106,12 @@ import { services, team } from '../data/salon';
             <h3 class="step-title" tabindex="-1" data-done-title>Reserva simulada concluída</h3>
             <dl class="summary" data-summary></dl>
             <details class="mail" open>
-              <summary>E-mail de confirmação (simulado)</summary>
+              <summary>Ver o e-mail de confirmação (simulado)</summary>
               <pre data-mail></pre>
             </details>
             <p class="dialog-note">Nenhum e-mail foi enviado. O arquivo de calendário abaixo é gerado neste navegador.</p>
           </div>
         </div>
-      </div>
 
       <div class="dialog-foot">
         <p class="reason" data-reason role="status" aria-live="polite"></p>

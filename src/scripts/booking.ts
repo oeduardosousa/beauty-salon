@@ -5,8 +5,6 @@ import { OPEN_WEEKDAYS, SLOTS, services, team } from '../data/salon';
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const DAYS_AHEAD = 14;
-// Blocks filled on the ten-block bar after each step.
-const BLOCKS = [3, 5, 8, 10];
 const reducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const pad = (n: number) => String(n).padStart(2, '0');
@@ -51,7 +49,9 @@ function init() {
   const nextBtn = q<HTMLButtonElement>('[data-next]');
   const reason = q('[data-reason]');
   const stepCount = q('[data-step-count]');
-  const blocks = q('[data-blocks]');
+  const stepperItems = [...root.querySelectorAll<HTMLElement>('[data-stepper-item]')];
+  const track = q('[data-track]');
+  const picks = q('[data-picks]');
   const daysEl = q('[data-days]');
   const slotsEl = q('[data-slots]');
   const slotsNote = q('[data-slots-note]');
@@ -189,6 +189,15 @@ function init() {
     return '';
   }
 
+  function paintStepper(n: number, all = false) {
+    stepperItems.forEach((li, i) => {
+      li.classList.toggle('is-done', all || i + 1 < n);
+      li.classList.toggle('is-current', !all && i + 1 === n);
+      if (!all && i + 1 === n) li.setAttribute('aria-current', 'step'); else li.removeAttribute('aria-current');
+    });
+    track.style.setProperty('--p', String(all ? 1 : (n - 1) / 3));
+  }
+
   function refresh() {
     const p = problem(step);
     nextBtn.disabled = !!p;
@@ -196,8 +205,10 @@ function init() {
     backBtn.disabled = step === 1;
     reason.textContent = p;
     stepCount.textContent = `Passo ${step} de 4`;
-    blocks.setAttribute('aria-label', `Progresso: passo ${step} de 4`);
-    [...blocks.children].forEach((b, i) => b.classList.toggle('is-on', i < BLOCKS[step - 1]));
+    paintStepper(step);
+    const bits = [service()?.name, stylistId() ? (stylist()?.name ?? 'Sem preferência') : '', date && slot ? `${fromIso(date).toLocaleDateString('pt-BR', { weekday: 'short', day: 'numeric', month: 'short' }).replace(/\./g, '')}, ${slot}` : ''].filter((t): t is string => !!t);
+    picks.hidden = !bits.length;
+    picks.replaceChildren(...bits.map((t) => { const b = document.createElement('span'); b.textContent = t; return b; }));
   }
 
   function goTo(n: number, viaKeyboard: boolean) {
@@ -278,9 +289,9 @@ function init() {
     form.hidden = true;
     buttons.hidden = true;
     reason.textContent = '';
-    stepCount.textContent = 'Instalando…';
+    stepCount.textContent = 'Confirmando…';
     installing.hidden = false;
-    const run = [...installing.querySelectorAll('.blocks i')];
+    const run = [...installing.querySelectorAll('.bar i')];
     run.forEach((b) => b.classList.remove('is-on'));
     const total = reducedMotion() ? 0 : 600;
     const each = total / run.length;
@@ -293,8 +304,7 @@ function init() {
     done.hidden = false;
     doneButtons.hidden = false;
     stepCount.textContent = 'Concluído';
-    [...blocks.children].forEach((x) => x.classList.add('is-on'));
-    blocks.setAttribute('aria-label', 'Progresso: concluído');
+    paintStepper(4, true);
     const svc = services.find((s) => s.id === b.servicoId)!;
     const rows: [string, string][] = [
       ['Serviço', `${b.servico} (${svc.time})`],
