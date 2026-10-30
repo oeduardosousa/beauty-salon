@@ -14,8 +14,25 @@ export interface ProState {
   days: Record<string, boolean>;
 }
 
+export interface Reserva {
+  id: string;
+  servico: string;
+  servicoId: string;
+  preco: string;
+  profissional: string;
+  /** Local date as YYYY-MM-DD and time as HH:MM. */
+  data: string;
+  hora: string;
+  nome: string;
+  email: string;
+  telefone: string;
+  obs: string;
+  criadaEm: string;
+}
+
 const ROLE = 'cintila-role';
 const ACCOUNT = 'cintila-conta';
+const BOOKINGS = 'cintila-reservas';
 const PRO = 'cintila-pro';
 
 function read<T>(key: string): T | null {
@@ -39,6 +56,10 @@ export const setRole = (role: Role) => write(ROLE, role);
 export const getAccount = () => read<Account>(ACCOUNT);
 export const saveAccount = (a: Account) => write(ACCOUNT, a);
 export const clearAccount = () => remove(ACCOUNT);
+
+export const getBookings = () => read<Reserva[]>(BOOKINGS) ?? [];
+export const addBooking = (r: Reserva) => write(BOOKINGS, [...getBookings(), r]);
+export const clearBookings = () => remove(BOOKINGS);
 
 export const getPro = () => read<ProState>(PRO) ?? { status: {}, days: {} };
 export const savePro = (s: ProState) => write(PRO, s);

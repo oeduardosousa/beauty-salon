@@ -1,0 +1,156 @@
+---
+// The booking desk: the shareware-installer wizard from DESIGN.md. Steps are real form fields;
+// booking.ts drives them. Everything here is simulated and stays in this browser tab.
+import '../styles/booking.css';
+import { services, team } from '../data/salon';
+---
+
+<section class="booking" id="reserva" data-theme="ink" aria-labelledby="reserva-title" data-booking>
+  <div class="container">
+    <div class="booking-head">
+      <p class="label eyebrow">Agendar</p>
+      <h2 class="headline" id="reserva-title">Reserve o seu <span class="serif">horário</span></h2>
+      <p class="lead muted">Quatro passos: serviço, profissional, data e detalhes. É uma simulação: nada é enviado e a reserva fica guardada só nesta aba do navegador.</p>
+    </div>
+
+    <div class="dialog" role="group" aria-labelledby="bk-title" data-dialog>
+      <div class="dialog-titlebar">
+        <span id="bk-title">Assistente de reserva</span>
+        <span data-step-count>Passo 1 de 4</span>
+      </div>
+
+      <div class="dialog-body">
+        <svg class="dialog-banner" viewBox="0 0 120 400" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+          <defs>
+            <pattern id="bk-dither" width="4" height="4" patternUnits="userSpaceOnUse">
+              <rect width="2" height="2" fill="#2B0E26" />
+              <rect x="2" y="2" width="2" height="2" fill="#2B0E26" />
+            </pattern>
+          </defs>
+          <rect width="120" height="400" fill="#FFF5F3" />
+          <rect y="120" width="120" height="160" fill="#F46FA1" />
+          <rect y="280" width="120" height="120" fill="#2B0E26" />
+          <rect y="100" width="120" height="20" fill="url(#bk-dither)" />
+          <rect y="260" width="120" height="20" fill="url(#bk-dither)" />
+        </svg>
+
+        <div class="dialog-main">
+          <div class="blocks" data-blocks role="img" aria-label="Progresso: passo 1 de 4">
+            {Array.from({ length: 10 }).map(() => <i />)}
+          </div>
+
+          <noscript><p class="dialog-note">O assistente de reserva precisa de JavaScript para funcionar.</p></noscript>
+
+          <form class="wizard" data-form novalidate>
+            <!-- Passo 1: serviço -->
+            <fieldset class="step" data-step="1">
+              <legend><h3 class="step-title" tabindex="-1">Escolha o serviço</h3></legend>
+              <div class="rows">
+                {services.map((s) => (
+                  <label class="row">
+                    <input type="radio" name="servico" value={s.id} />
+                    <span class="row-main"><span class="row-name">{s.name}</span><span class="row-meta">{s.cat} · {s.time}</span></span>
+                    <span class="row-side">{s.price}<small>preço de exemplo</small></span>
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+
+            <!-- Passo 2: profissional -->
+            <fieldset class="step" data-step="2" hidden>
+              <legend><h3 class="step-title" tabindex="-1">Escolha a profissional</h3></legend>
+              <div class="rows">
+                <label class="row">
+                  <input type="radio" name="profissional" value="any" />
+                  <span class="row-main"><span class="row-name">Sem preferência</span><span class="row-meta">Qualquer profissional disponível</span></span>
+                </label>
+                {team.map((p) => (
+                  <label class="row">
+                    <input type="radio" name="profissional" value={p.id} />
+                    <span class="row-main"><span class="row-name">{p.name}</span><span class="row-meta">{p.role} · {p.days}</span></span>
+                  </label>
+                ))}
+              </div>
+              <p class="dialog-note">Equipe de exemplo. As profissionais são inventadas.</p>
+            </fieldset>
+
+            <!-- Passo 3: data e horário -->
+            <fieldset class="step" data-step="3" hidden>
+              <legend><h3 class="step-title" tabindex="-1">Escolha o dia e o horário</h3></legend>
+              <p class="step-sub" id="bk-days-label">Dia (terça a sábado)</p>
+              <div class="chips chips--days" data-days role="radiogroup" aria-labelledby="bk-days-label"></div>
+              <p class="step-sub" id="bk-slots-label">Horário</p>
+              <div class="chips chips--slots" data-slots role="radiogroup" aria-labelledby="bk-slots-label"></div>
+              <p class="dialog-note" data-slots-note>Escolha um dia para ver os horários.</p>
+            </fieldset>
+
+            <!-- Passo 4: detalhes -->
+            <fieldset class="step" data-step="4" hidden>
+              <legend><h3 class="step-title" tabindex="-1">Seus detalhes</h3></legend>
+              <p class="dialog-note" data-prefill hidden></p>
+              <div class="dfield">
+                <label for="bk-nome">Nome</label>
+                <input id="bk-nome" name="nome" type="text" autocomplete="name" required aria-describedby="bk-e-nome" />
+                <p class="dfield-error" id="bk-e-nome"></p>
+              </div>
+              <div class="dfield">
+                <label for="bk-email">E-mail</label>
+                <input id="bk-email" name="email" type="email" autocomplete="email" inputmode="email" required aria-describedby="bk-e-email" />
+                <p class="dfield-error" id="bk-e-email"></p>
+              </div>
+              <div class="dfield">
+                <label for="bk-tel">Celular com DDD</label>
+                <input id="bk-tel" name="telefone" type="tel" autocomplete="tel-national" inputmode="tel" placeholder="(11) 90000-0000" required aria-describedby="bk-e-tel" />
+                <p class="dfield-error" id="bk-e-tel"></p>
+              </div>
+              <div class="dfield">
+                <label for="bk-obs">Observações (opcional)</label>
+                <textarea id="bk-obs" name="obs" rows="2" maxlength="200"></textarea>
+              </div>
+              <div class="dcheck">
+                <input id="bk-ok" name="ok" type="checkbox" required aria-describedby="bk-e-ok" />
+                <label for="bk-ok">Entendo que é uma simulação: nenhuma reserva real é feita.</label>
+                <p class="dfield-error" id="bk-e-ok"></p>
+              </div>
+            </fieldset>
+          </form>
+
+          <!-- Instalando… -->
+          <div class="installing" data-installing hidden>
+            <p class="step-title">Instalando…</p>
+            <div class="blocks blocks--run" data-run aria-hidden="true">
+              {Array.from({ length: 10 }).map(() => <i />)}
+            </div>
+          </div>
+
+          <!-- Confirmação -->
+          <div class="done" data-done hidden>
+            <h3 class="step-title" tabindex="-1" data-done-title>Reserva simulada concluída</h3>
+            <dl class="summary" data-summary></dl>
+            <details class="mail" open>
+              <summary>E-mail de confirmação (simulado)</summary>
+              <pre data-mail></pre>
+            </details>
+            <p class="dialog-note">Nenhum e-mail foi enviado. O arquivo de calendário abaixo é gerado neste navegador.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="dialog-foot">
+        <p class="reason" data-reason role="status" aria-live="polite"></p>
+        <div class="dialog-buttons" data-buttons>
+          <button class="dbtn" type="button" data-back>Voltar</button>
+          <button class="dbtn dbtn--default" type="button" data-next>Próximo</button>
+        </div>
+        <div class="dialog-buttons" data-done-buttons hidden>
+          <button class="dbtn" type="button" data-ics>Salvar no calendário</button>
+          <button class="dbtn dbtn--default" type="button" data-again>Nova reserva</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import '../scripts/booking.ts';
+</script>

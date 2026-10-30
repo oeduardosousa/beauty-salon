@@ -66,10 +66,11 @@ import Base from '../layouts/Base.astro';
 
           <section class="panel" aria-labelledby="p-ag">
             <h2 class="label eyebrow" id="p-ag">Próximos agendamentos</h2>
-            <p class="panel-empty">Nenhum agendamento ainda.</p>
-            <p class="muted">O assistente de reserva em quatro passos é a próxima etapa do projeto. Quando ele chegar, as reservas desta conta aparecem aqui.</p>
+            <p class="panel-empty" data-no-bookings>Nenhum agendamento ainda.</p>
+            <ul class="data" data-bookings></ul>
+            <p class="muted">Reservas simuladas, guardadas só nesta aba do navegador.</p>
             <div class="form-actions">
-              <a class="btn" href="/agendar">Ir para o agendamento</a>
+              <a class="btn" href="/#reserva">Ir para o agendamento</a>
             </div>
           </section>
         </div>

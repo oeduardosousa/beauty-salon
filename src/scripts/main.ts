@@ -3,6 +3,9 @@
 // `astro:page-load` and torn down on `astro:before-swap`.
 import { navigate } from 'astro:transitions/client';
 import { getRole, setRole, syncAccountLabels, type Role } from './session';
+// Static on purpose: a dynamic CSS import is injected once, and the router's head swap
+// drops it, leaving the map's tiles unstyled after navigating away and back.
+import 'leaflet/dist/leaflet.css';
 
 const root = document.documentElement;
 
@@ -121,7 +124,6 @@ function initPage() {
       if (!en.isIntersecting) return;
       mapIo.disconnect();
       const L = (await import('leaflet')).default;
-      await import('leaflet/dist/leaflet.css');
       if (signal.aborted) return;
       // MASP, Avenida Paulista. The salon itself is fictional.
       const center: [number, number] = [-23.5614, -46.6559];
@@ -149,12 +151,14 @@ function initPage() {
 
   // Hide the phone booking button while the booking band is on screen.
   const sticky = document.getElementById('sticky-cta');
-  const band = document.querySelector('.band');
-  if (sticky && band && 'IntersectionObserver' in window) {
-    const io = new IntersectionObserver(([en]) => {
-      sticky.style.display = en.isIntersecting ? 'none' : '';
+  const bookingParts = document.querySelectorAll('.band, .booking');
+  if (sticky && bookingParts.length && 'IntersectionObserver' in window) {
+    const visible = new Set<Element>();
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((en) => (en.isIntersecting ? visible.add(en.target) : visible.delete(en.target)));
+      sticky.style.display = visible.size ? 'none' : '';
     });
-    io.observe(band);
+    bookingParts.forEach((el) => io.observe(el));
     signal.addEventListener('abort', () => io.disconnect());
   }
 
@@ -202,6 +206,13 @@ document.addEventListener('astro:before-swap', (e) => {
     if (next.body.hasAttribute('data-scenes') && !introSeen()) nextRoot.classList.add('has-loader');
   }
   nextRoot.dataset.nav = navKind;
+  // In dev, Vite injects the imported CSS as a <style> that runs once; the head swap would drop it.
+  document.head.querySelectorAll<HTMLStyleElement>('style[data-vite-dev-id]').forEach((s) => {
+    const id = s.dataset.viteDevId;
+    if (!next.head.querySelector(`style[data-vite-dev-id="${CSS.escape(id ?? '')}"]`)) {
+      next.head.appendChild(s.cloneNode(true));
+    }
+  });
 });
 
 document.addEventListener('astro:page-load', initPage);

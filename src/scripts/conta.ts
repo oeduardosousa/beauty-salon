@@ -1,5 +1,5 @@
 // Temporary client account: validated form -> sessionStorage -> account summary. No backend.
-import { clearAccount, getAccount, saveAccount, syncAccountLabels } from './session';
+import { clearAccount, getAccount, getBookings, saveAccount, syncAccountLabels } from './session';
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
@@ -39,6 +39,16 @@ function init() {
     const values: Record<string, string> = { nome: account.nome, email: account.email, telefone: account.telefone, criadaEm: when };
     page.querySelectorAll<HTMLElement>('[data-f]').forEach((el) => { el.textContent = values[el.dataset.f!] ?? ''; });
     created.hidden = !justCreated;
+    const bookings = getBookings();
+    page.querySelector<HTMLElement>('[data-no-bookings]')!.hidden = bookings.length > 0;
+    page.querySelector<HTMLElement>('[data-bookings]')!.replaceChildren(
+      ...bookings.map((b) => {
+        const li = document.createElement('li');
+        const day = new Date(b.data + 'T00:00').toLocaleDateString('pt-BR', { weekday: 'short', day: '2-digit', month: 'short' });
+        li.textContent = `${b.servico} com ${b.profissional}, ${day} às ${b.hora}`;
+        return li;
+      }),
+    );
     show(accountView, animate);
   }
 

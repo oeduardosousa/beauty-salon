@@ -3,21 +3,10 @@ import Base from '../layouts/Base.astro';
 import Placeholder from '../components/Placeholder.astro';
 import Strands from '../components/Strands.astro';
 import HeroScene from '../components/HeroScene.astro';
+import Booking from '../components/Booking.astro';
+import { services, team } from '../data/salon';
 
 // All services, prices, people and quotes below are invented placeholders.
-const services = [
-  { cat: 'Corte', name: 'Corte Claquete', time: '45 min', price: 'R$ 90' },
-  { cat: 'Corte', name: 'Take Um: corte e escova', time: '1h15', price: 'R$ 140' },
-  { cat: 'Cor', name: 'Luzes em Cena', time: '3h', price: 'R$ 380' },
-  { cat: 'Cor', name: 'Raiz Perfeita', time: '1h30', price: 'R$ 160' },
-  { cat: 'Tratamento', name: 'Hidratação Close-up', time: '50 min', price: 'R$ 110' },
-  { cat: 'Penteado', name: 'Penteado de Estreia', time: '1h', price: 'R$ 120' },
-];
-const team = [
-  { name: 'Marina', role: 'Corte e coloração', days: 'Ter a sáb', variant: 'a' as const, speed: '0.85' },
-  { name: 'Caio', role: 'Cortes curtos e texturas', days: 'Qua a dom', variant: 'c' as const, speed: '1' },
-  { name: 'Lívia', role: 'Penteados e tratamentos', days: 'Seg a sex', variant: 'b' as const, speed: '1.15' },
-];
 const quotes = [
   'Saí com o cabelo que eu tinha na cabeça, só que melhor.',
   'Me explicaram cada passo antes de cortar. Dá confiança.',
@@ -48,7 +37,7 @@ const quotes = [
             Corte, cor e cuidado no Cintila Studio. Escolha o serviço, a profissional e o horário em quatro passos.
           </p>
           <div class="hero-actions" data-intro>
-            <a class="btn" href="/agendar" data-magnetic>Agendar</a>
+            <a class="btn" href="#reserva" data-magnetic>Agendar</a>
             <a class="btn btn--secondary" href="#servicos" data-magnetic>Ver serviços<span class="arrow" aria-hidden="true">↓</span></a>
           </div>
         </div>
@@ -97,7 +86,7 @@ const quotes = [
         </div>
       </div>
       <div class="container" style="margin-top:48px">
-        <a class="btn" href="/agendar" data-magnetic>Agendar um serviço</a>
+        <a class="btn" href="#reserva" data-magnetic>Agendar um serviço</a>
       </div>
     </section>
 
@@ -182,11 +171,12 @@ const quotes = [
       <div class="container">
         <p class="label">Quatro passos: serviço, profissional, data e detalhes</p>
         <h2 id="agendar-title" style="margin:0">
-          <a class="band-link" href="/agendar" data-magnetic>Agendar<span class="serif">.</span></a>
+          <a class="band-link" href="#reserva" data-magnetic>Agendar<span class="serif">.</span></a>
         </h2>
-        <a class="btn" href="/agendar" data-magnetic>Começar a reserva</a>
+        <a class="btn" href="#reserva" data-magnetic>Começar a reserva</a>
       </div>
     </section>
+    <Booking />
   </main>
 
   <footer class="site-footer" id="contato" data-theme="ink">
@@ -212,7 +202,7 @@ const quotes = [
             <li><a class="nav-link" href="#servicos">Serviços</a></li>
             <li><a class="nav-link" href="#equipe">Equipe</a></li>
             <li><a class="nav-link" href="#galeria">Galeria</a></li>
-            <li><a class="nav-link" href="/agendar">Agendar</a></li>
+            <li><a class="nav-link" href="#reserva">Agendar</a></li>
           </ul>
         </div>
       </div>
