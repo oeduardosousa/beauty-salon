@@ -95,7 +95,7 @@ const hasSwitch = role !== 'entrada';
           <nav class="nav-desktop label" aria-label="Principal">
             {nav.map((l) => <a class="nav-link" href={l.href}>{l.label}</a>)}
             {role === 'cliente' && <a class="nav-link" href="/conta" data-account-label>Minha conta</a>}
-            {role === 'cliente' && <a class="btn" href="/#reserva">Agendar</a>}
+            {role === 'cliente' && <a class="btn" href="/agendar">Agendar</a>}
           </nav>
         )}
         {nav.length > 0 && (
@@ -112,7 +112,7 @@ const hasSwitch = role !== 'entrada';
           <nav aria-label="Menu principal">
             {nav.map((l) => <a href={l.href}>{l.label}</a>)}
             {role === 'cliente' && <a href="/conta" data-account-label>Minha conta</a>}
-            {role === 'cliente' && <a href="/#reserva">Agendar</a>}
+            {role === 'cliente' && <a href="/agendar">Agendar</a>}
           </nav>
         </div>
         <p class="label muted-on-ink" style="color:var(--muted-on-ink)">Salão fictício · projeto de portfólio</p>
@@ -122,7 +122,7 @@ const hasSwitch = role !== 'entrada';
     <slot />
 
     {role === 'cliente' && (
-      <div class="sticky-cta" id="sticky-cta"><a class="btn" href="/#reserva">Agendar</a></div>
+      <div class="sticky-cta" id="sticky-cta"><a class="btn" href="/agendar">Agendar</a></div>
     )}
 
     <script>

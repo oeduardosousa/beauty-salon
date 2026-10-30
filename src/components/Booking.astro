@@ -5,14 +5,7 @@ import '../styles/booking.css';
 import { services, team } from '../data/salon';
 ---
 
-<section class="booking" id="reserva" data-theme="ink" aria-labelledby="reserva-title" data-booking>
-  <div class="container">
-    <div class="booking-head">
-      <p class="label eyebrow">Agendar</p>
-      <h2 class="headline" id="reserva-title">Reserve o seu <span class="serif">horário</span></h2>
-      <p class="lead muted">Quatro passos: serviço, profissional, data e detalhes. É uma simulação: nada é enviado e a reserva fica guardada só nesta aba do navegador.</p>
-    </div>
-
+<div class="booking" data-booking>
     <div class="dialog" role="group" aria-labelledby="bk-title" data-dialog>
       <div class="dialog-titlebar">
         <span id="bk-title">Assistente de reserva</span>
@@ -148,8 +141,7 @@ import { services, team } from '../data/salon';
         </div>
       </div>
     </div>
-  </div>
-</section>
+</div>
 
 <script>
   import '../scripts/booking.ts';

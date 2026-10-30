@@ -1,24 +1,20 @@
 ---
 import Base from '../layouts/Base.astro';
+import Booking from '../components/Booking.astro';
 ---
 
-<!-- The booking wizard lives on the home page (#reserva). This route only forwards old links there. -->
 <Base
   title="Agendar · Cintila Studio"
-  description="A reserva em quatro passos do Cintila Studio, salão fictício de portfólio, fica na página inicial."
+  description="Reserve em quatro passos no Cintila Studio, salão fictício de portfólio: serviço, profissional, data e detalhes. A reserva é simulada."
 >
-  <main id="conteudo" style="min-height:100svh;display:grid;place-items:center;padding:96px var(--gutter)">
-    <div style="display:grid;gap:24px;max-width:560px">
-      <p class="label eyebrow">Agendar</p>
-      <h1 class="headline">Levando você à <span class="serif">reserva</span></h1>
-      <p><a class="btn" href="/#reserva">Ir para o agendamento</a></p>
+  <main id="conteudo" class="app">
+    <div class="container app-inner">
+      <div class="app-head">
+        <p class="label eyebrow">Agendar</p>
+        <h1 class="headline">Reserve o seu <span class="serif">horário</span></h1>
+        <p class="lead muted">Quatro passos: serviço, profissional, data e detalhes. É uma simulação: nada é enviado e a reserva fica guardada só nesta aba do navegador.</p>
+      </div>
+      <Booking />
     </div>
   </main>
 </Base>
-
-<script>
-  import { navigate } from 'astro:transitions/client';
-  document.addEventListener('astro:page-load', () => {
-    if (location.pathname === '/agendar') navigate('/#reserva');
-  });
-</script>
