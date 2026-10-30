@@ -1,0 +1,110 @@
+---
+// Original flat illustrations of invented people, drawn for the demo. No photos, no real faces.
+interface Props {
+  who: 'marina' | 'caio' | 'livia' | 'antes' | 'depois';
+  alt: string;
+  /** Landscape crop (head and shoulders) for the before/after stage. */
+  wide?: boolean;
+  caption?: boolean;
+}
+const { who, alt, wide = false, caption = true } = Astro.props;
+
+const looks = {
+  marina: { bg: '#431A3C', glow: '#F46FA1', skin: '#EBBB9C', shade: '#D79F80', top: '#FFF5F3', hair: '#B4501F', hair2: '#E08A45' },
+  caio: { bg: '#E8DAF6', glow: '#F46FA1', skin: '#94603F', shade: '#7E4E30', top: '#2B0E26', hair: '#1D1217', hair2: '#3A2730' },
+  livia: { bg: '#F46FA1', glow: '#FFF5F3', skin: '#CF9068', shade: '#B97852', top: '#2B0E26', hair: '#D9A85B', hair2: '#F2D08E' },
+  antes: { bg: '#E8DAF6', glow: '#FFF5F3', skin: '#E6B496', shade: '#D29A7B', top: '#6B5A66', hair: '#5C4A3C', hair2: '#7A6656' },
+  depois: { bg: '#F46FA1', glow: '#FFF5F3', skin: '#E6B496', shade: '#D29A7B', top: '#2B0E26', hair: '#8A1B4C', hair2: '#E8528C' },
+};
+const c = looks[who];
+const ink = '#2B0E26';
+---
+<figure class="frame" data-cursor="ver">
+  <div class="img-inner" data-parallax>
+    <svg viewBox={wide ? '0 100 400 300' : '0 0 400 500'} preserveAspectRatio="xMidYMid slice" role="img" aria-label={`Imagem ilustrativa: ${alt}`}>
+      <rect width="400" height="500" fill={c.bg} />
+      <circle cx="200" cy="250" r="190" fill={c.glow} opacity="0.18" />
+      <circle cx="318" cy="120" r="34" fill={c.glow} opacity="0.55" />
+
+      {/* hair behind the head */}
+      {who === 'marina' && (
+        <g>
+          <path d="M128 262 C104 150 150 112 202 112 C256 112 298 150 274 262 C292 340 304 410 296 470 L104 470 C96 410 108 340 128 262Z" fill={c.hair} />
+          <path d="M120 330 C140 360 130 410 150 450 M282 330 C262 360 272 410 252 450" stroke={c.hair2} stroke-width="7" fill="none" stroke-linecap="round" opacity="0.7" />
+        </g>
+      )}
+      {who === 'caio' && (
+        <g fill={c.hair}>
+          <circle cx="150" cy="172" r="30" /><circle cx="186" cy="146" r="34" /><circle cx="228" cy="146" r="34" />
+          <circle cx="262" cy="174" r="30" /><circle cx="205" cy="168" r="42" />
+        </g>
+      )}
+      {who === 'livia' && (
+        <g>
+          <circle cx="200" cy="112" r="46" fill={c.hair} />
+          <path d="M160 108 C180 92 222 90 244 112 M164 126 C186 110 220 108 238 126" stroke={c.hair2} stroke-width="6" fill="none" stroke-linecap="round" />
+        </g>
+      )}
+      {who === 'antes' && (
+        <path d="M134 262 C116 160 156 124 202 124 C250 124 290 160 270 262 C280 320 292 356 278 392 L246 380 L232 398 L200 384 L170 396 L152 380 L122 388 C118 340 124 300 134 262Z" fill={c.hair} />
+      )}
+      {who === 'depois' && (
+        <g>
+          <path d="M124 262 C98 150 148 106 202 106 C258 106 304 150 278 262 C300 340 312 420 296 500 L104 500 C88 420 102 340 124 262Z" fill={c.hair} />
+          <path d="M116 320 C142 350 112 410 140 470 M286 320 C260 350 290 410 262 470 M150 330 C166 370 152 410 170 450 M250 330 C236 370 250 410 232 450" stroke={c.hair2} stroke-width="6" fill="none" stroke-linecap="round" opacity="0.8" />
+        </g>
+      )}
+
+      {/* neck and shoulders */}
+      <path d="M170 318 H230 V402 C230 414 170 414 170 402Z" fill={c.shade} />
+      <path d="M36 500 C46 424 118 396 200 396 C282 396 354 424 364 500Z" fill={c.top} />
+      {who === 'caio' && <path d="M168 396 L200 440 L232 396 L218 392 L200 416 L182 392Z" fill={c.skin} />}
+      {who === 'marina' && <path d="M150 400 C170 424 230 424 250 400" stroke={c.shade} stroke-width="3" fill="none" opacity="0.5" />}
+      <path d="M170 372 C186 390 214 390 230 372 V396 H170Z" fill={c.shade} opacity="0.35" />
+
+      {/* face */}
+      <ellipse cx="200" cy="268" rx="62" ry="78" fill={c.skin} />
+      <ellipse cx="139" cy="278" rx="9" ry="14" fill={c.skin} />
+      <ellipse cx="261" cy="278" rx="9" ry="14" fill={c.skin} />
+      <path d="M200 280 C193 296 192 304 200 308" stroke={c.shade} stroke-width="3" fill="none" stroke-linecap="round" />
+      <path d="M166 268 q11 9 22 0 M212 268 q11 9 22 0" stroke={ink} stroke-width="3.5" fill="none" stroke-linecap="round" />
+      <path d="M162 252 q14 -9 28 -2 M210 250 q14 -7 28 2" stroke={who === 'caio' ? c.hair : c.shade} stroke-width="4" fill="none" stroke-linecap="round" />
+      <circle cx="160" cy="298" r="11" fill="#F46FA1" opacity="0.28" />
+      <circle cx="240" cy="298" r="11" fill="#F46FA1" opacity="0.28" />
+      <path d="M185 326 q15 11 30 0 q-15 -5 -30 0Z" fill={who === 'caio' ? '#7A3B3A' : '#C8365F'} />
+
+      {/* hair in front */}
+      {who === 'marina' && (
+        <path d="M134 268 C122 184 168 142 208 146 C254 150 284 196 266 268 C258 222 232 196 192 192 C160 196 142 226 134 268Z" fill={c.hair} />
+      )}
+      {who === 'caio' && (
+        <g fill={c.hair}>
+          <path d="M138 262 C126 180 164 156 200 156 C240 156 276 180 262 262 C254 222 234 204 200 204 C166 204 146 222 138 262Z" />
+          <circle cx="164" cy="190" r="17" /><circle cx="198" cy="176" r="18" /><circle cx="234" cy="184" r="18" /><circle cx="256" cy="212" r="12" /><circle cx="144" cy="216" r="12" />
+        </g>
+      )}
+      {who === 'livia' && (
+        <g>
+          <path d="M136 268 C124 184 166 150 202 150 C244 150 280 186 264 268 C254 220 230 196 200 194 C168 196 146 224 136 268Z" fill={c.hair} />
+          <path d="M200 150 C196 170 194 186 192 196" stroke={c.hair2} stroke-width="3" fill="none" />
+          <circle cx="138" cy="326" r="14" fill="none" stroke="#2B0E26" stroke-width="4" />
+          <circle cx="262" cy="326" r="14" fill="none" stroke="#2B0E26" stroke-width="4" />
+        </g>
+      )}
+      {who === 'antes' && (
+        <g>
+          <path d="M138 262 C130 190 168 160 208 160 C250 160 276 196 262 262 C254 214 232 190 196 188 C166 192 148 220 138 262Z" fill={c.hair} />
+          <path d="M120 300 L112 336 M284 296 L292 340 M150 160 L138 142 M250 164 L262 146" stroke={c.hair2} stroke-width="3" stroke-linecap="round" />
+        </g>
+      )}
+      {who === 'depois' && (
+        <g>
+          <path d="M132 270 C116 176 166 136 210 138 C256 142 288 190 268 270 C260 222 234 192 194 188 C160 194 140 226 132 270Z" fill={c.hair} />
+          <path d="M156 176 C180 156 220 154 246 176" stroke={c.hair2} stroke-width="8" fill="none" stroke-linecap="round" opacity="0.85" />
+          <path d="M138 222 C148 196 160 184 176 176" stroke="#FFF5F3" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.5" />
+        </g>
+      )}
+    </svg>
+  </div>
+  {caption && <figcaption class="tag-ph">Imagem ilustrativa</figcaption>}
+</figure>

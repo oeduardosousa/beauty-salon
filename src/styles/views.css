@@ -8,7 +8,17 @@
 @media (min-width: 768px) { .header-switch { display: block; } }
 @media (min-width: 1100px) { .header-switch { margin-left: 0; } }
 .menu-btn { margin-left: auto; }
-@media (min-width: 768px) { .menu-btn { margin-left: 16px; } }
+/* With the switch present, a 1fr / auto / 1fr grid keeps the switch on the page's centre line. */
+@media (min-width: 768px) {
+  .menu-btn { margin-left: 0; }
+  .site-header .container:has(.header-switch) {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+  }
+  .site-header .container:has(.header-switch) > .wordmark { justify-self: start; }
+  .site-header .container:has(.header-switch) > .menu-btn,
+  .site-header .container:has(.header-switch) > .nav-desktop { justify-self: end; }
+}
 
 .role-switch {
   --sw-bg: var(--ink);

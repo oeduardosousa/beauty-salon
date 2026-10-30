@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import Placeholder from '../components/Placeholder.astro';
+import Portrait from '../components/Portrait.astro';
 import Strands from '../components/Strands.astro';
 import HeroScene from '../components/HeroScene.astro';
 import { services, team } from '../data/salon';
@@ -100,7 +100,7 @@ const quotes = [
         <ul class="team">
           {team.map((p) => (
             <li class="person" data-speed={p.speed}>
-              <Placeholder variant={p.variant} alt={`retrato da equipe, ${p.name}`} />
+              <Portrait who={p.id as 'marina' | 'caio' | 'livia'} alt={`retrato da equipe, ${p.name}`} />
               <h3 class="serif">{p.name}</h3>
               <ul>
                 <li>{p.role}</li>
@@ -128,8 +128,8 @@ const quotes = [
         </div>
         <div class="compare-view">
           <div class="compare-stage" id="compare-stage">
-            <div class="layer before"><Placeholder variant="c" alt="antes: cabelo sem corte definido" caption={false} /></div>
-            <div class="layer after"><Placeholder variant="b" alt="depois: cabelo com corte e cor" caption={false} /></div>
+            <div class="layer before"><Portrait who="antes" wide alt="antes: cabelo sem corte definido" caption={false} /></div>
+            <div class="layer after"><Portrait who="depois" wide alt="depois: cabelo com corte e cor" caption={false} /></div>
             <div class="divider" aria-hidden="true"></div>
             <span class="tag-ph" style="position:absolute;left:8px;bottom:8px">Imagem ilustrativa</span>
           </div>
