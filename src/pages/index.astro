@@ -49,7 +49,7 @@ const quotes = [
           </p>
           <div class="hero-actions" data-intro>
             <a class="btn" href="/agendar" data-magnetic>Agendar</a>
-            <a class="btn btn--secondary" href="#servicos" data-magnetic>Ver serviços</a>
+            <a class="btn btn--secondary" href="#servicos" data-magnetic>Ver serviços<span class="arrow" aria-hidden="true">↓</span></a>
           </div>
         </div>
         <div class="hero-media">
@@ -196,7 +196,7 @@ const quotes = [
           <h2 class="label">Contato</h2>
           <p>Rua Exemplo, 000<br />Cidade Fictícia</p>
           <p class="muted">Endereço e telefone fictícios.</p>
-          <p class="muted">Mapa: indisponível na demonstração.</p>
+          <p class="muted">Localização fictícia no mapa abaixo.</p>
         </div>
         <div>
           <h2 class="label">Horários</h2>
@@ -216,9 +216,13 @@ const quotes = [
           </ul>
         </div>
       </div>
+      <div class="footer-map">
+        <div class="shop-map" id="shop-map" role="region" aria-label="Mapa com a localização fictícia do Cintila Studio" data-popup-title="Cintila Studio" data-popup-note="Endereço fictício, só para demonstração"></div>
+      </div>
       <p class="footer-demo">
         Este site é uma demonstração de portfólio. O Cintila Studio não existe: nomes, preços, equipe, imagens e opiniões são inventados, e as reservas são simuladas.
       </p>
+      <p class="footer-credit">Feito por <a href="https://github.com/oeduardosousa" target="_blank" rel="noopener">Eduardo Sousa</a></p>
       <p class="giant" aria-hidden="true">Cintila Studio</p>
     </div>
   </footer>

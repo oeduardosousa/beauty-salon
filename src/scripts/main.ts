@@ -83,6 +83,40 @@ function initPage() {
     }, { signal });
   }
 
+  // Footer map (Leaflet + OpenStreetMap tiles), loaded only when it nears the viewport.
+  const mapEl = document.getElementById('shop-map');
+  if (mapEl && 'IntersectionObserver' in window) {
+    let map: import('leaflet').Map | undefined;
+    const mapIo = new IntersectionObserver(async ([en]) => {
+      if (!en.isIntersecting) return;
+      mapIo.disconnect();
+      const L = (await import('leaflet')).default;
+      await import('leaflet/dist/leaflet.css');
+      if (signal.aborted) return;
+      // MASP, Avenida Paulista. The salon itself is fictional.
+      const center: [number, number] = [-23.5614, -46.6559];
+      map = L.map(mapEl, { center, zoom: 15, scrollWheelZoom: false });
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      }).addTo(map);
+      const pin = '<svg xmlns="http://www.w3.org/2000/svg" width="40" height="48" viewBox="0 0 24 29" aria-hidden="true"><path d="M12 1.5C6.8 1.5 3 5.4 3 10.3c0 6.6 9 17 9 17s9-10.4 9-17C21 5.4 17.2 1.5 12 1.5z" fill="#f46fa1" stroke="#2b0e26" stroke-width="1.8"/><circle cx="12" cy="10.3" r="3.2" fill="#2b0e26"/></svg>';
+      const icon = L.divIcon({ html: pin, className: 'shop-pin', iconSize: [40, 48], iconAnchor: [20, 46], popupAnchor: [0, -44] });
+      const popup = document.createElement('div');
+      const title = document.createElement('strong');
+      title.textContent = mapEl.dataset.popupTitle ?? '';
+      const note = document.createElement('span');
+      note.textContent = mapEl.dataset.popupNote ?? '';
+      popup.append(title, note);
+      L.marker(center, { icon, title: title.textContent }).addTo(map).bindPopup(popup).openPopup();
+      // Wheel zoom only once the map is focused, so page scrolling is never trapped.
+      map.on('focus click', () => map?.scrollWheelZoom.enable());
+      map.on('blur', () => map?.scrollWheelZoom.disable());
+    }, { rootMargin: '300px' });
+    mapIo.observe(mapEl);
+    signal.addEventListener('abort', () => { mapIo.disconnect(); map?.remove(); });
+  }
+
   // Hide the phone booking button while the booking band is on screen.
   const sticky = document.getElementById('sticky-cta');
   const band = document.querySelector('.band');

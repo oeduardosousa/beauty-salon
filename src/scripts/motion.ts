@@ -37,10 +37,25 @@ export async function initMotion(): Promise<() => void> {
     if (url.pathname !== location.pathname || !url.hash) return;
     const target = document.querySelector<HTMLElement>(url.hash);
     if (!target) return;
+    // Capture phase: keep the router's own (instant) hash handling from fighting the glide.
     e.preventDefault();
-    lenis.scrollTo(target, { offset: -72, duration: 1.1 });
+    e.stopImmediatePropagation();
+    a.classList.add('is-going');
+    // Lenis also honours the CSS scroll-padding-top (header height + 16px), so no manual offset for sections.
+    const pad = parseFloat(getComputedStyle(root).scrollPaddingTop) || 0;
+    const offset = target.id === 'contato' ? pad : 0;
+    // Headline splits revert as they are passed and nudge the layout, so settle once more on arrival.
+    const settle = () => {
+      if (Math.abs(target.getBoundingClientRect().top - (pad - offset)) > 4) lenis.scrollTo(target, { offset, duration: 0.5 });
+    };
+    lenis.scrollTo(target, {
+      offset,
+      duration: 1.5,
+      easing: (t) => 1 - Math.pow(1 - t, 4),
+      onComplete: () => { a.classList.remove('is-going'); settle(); },
+    });
     history.pushState(null, '', url.hash);
-  }, { signal });
+  }, { signal, capture: true });
 
   /* ---------- Loader and hero intro ---------- */
   function heroIntro() {
@@ -317,5 +332,8 @@ export async function initMotion(): Promise<() => void> {
     cursorFx();
   });
   ScrollTrigger.refresh();
+  // Arriving from another page with a hash (e.g. /agendar to /#equipe): glide there.
+  const hashTarget = location.hash.length > 1 ? document.querySelector<HTMLElement>(location.hash) : null;
+  if (hashTarget) lenis.scrollTo(hashTarget, { offset: hashTarget.id === 'contato' ? parseFloat(getComputedStyle(root).scrollPaddingTop) || 0 : 0, duration: 1.5 });
   return destroy;
 }
