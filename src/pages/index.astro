@@ -6,12 +6,13 @@ import HeroScene from '../components/HeroScene.astro';
 import { services, team } from '../data/salon';
 
 // All services, prices, people and quotes below are invented placeholders.
-const quotes = [
-  'Saí com o cabelo que eu tinha na cabeça, só que melhor.',
-  'Me explicaram cada passo antes de cortar. Dá confiança.',
-  'A cor ficou natural e a hidratação durou semanas.',
-  'Marquei em poucos toques e fui atendida na hora.',
-  'Um corte com cara de cena final de filme.',
+// Each quote names the (invented) service it is about, so the testimonials read as specific, not generic.
+const quotes: [string, string][] = [
+  ['Saí com o cabelo que eu tinha na cabeça, só que melhor.', 'Corte Claquete'],
+  ['Me explicaram cada passo antes de cortar. Dá confiança.', 'Take Um: corte e escova'],
+  ['A cor ficou natural e a hidratação durou semanas.', 'Luzes em Cena'],
+  ['Marquei em poucos toques e fui atendida na hora.', 'Raiz Perfeita'],
+  ['Um corte com cara de cena final de filme.', 'Penteado de Estreia'],
 ];
 ---
 
@@ -77,8 +78,9 @@ const quotes = [
                 <h3>{s.name}</h3>
                 <dl>
                   <div><dt class="label muted">Duração</dt><dd>{s.time}</dd></div>
-                  <div><dt class="sr-only" style="position:absolute;left:-9999px">Preço</dt><dd class="price">{s.price}<small>preço de exemplo</small></dd></div>
+                  <div><dt class="sr-only">Preço</dt><dd class="price">{s.price}<small>preço de exemplo</small></dd></div>
                 </dl>
+                <a class="link card-book" href={`/agendar?servico=${s.id}`}>Agendar este serviço<span class="sr-only"> ({s.name})</span></a>
               </li>
             ))}
           </ul>
@@ -149,16 +151,16 @@ const quotes = [
       </div>
       <div class="marquee" tabindex="0" role="region" aria-label="Opiniões de exemplo">
         <ul class="marquee-track">
-          {quotes.map((q) => (
+          {quotes.map(([q, svc]) => (
             <li class="quote">
               <blockquote>{q}</blockquote>
-              <p class="label muted">Opinião de exemplo</p>
+              <p class="label muted">{svc} · opinião de exemplo</p>
             </li>
           ))}
-          {quotes.map((q) => (
+          {quotes.map(([q, svc]) => (
             <li class="quote" aria-hidden="true">
               <blockquote>{q}</blockquote>
-              <p class="label muted">Opinião de exemplo</p>
+              <p class="label muted">{svc} · opinião de exemplo</p>
             </li>
           ))}
         </ul>
@@ -204,6 +206,31 @@ const quotes = [
           </ul>
         </div>
       </div>
+      <div class="footer-contact" data-contact>
+        <h2 class="label">Fale com a gente</h2>
+        <form class="form contact-form" novalidate>
+          <div class="field">
+            <label for="c-nome">Nome</label>
+            <input id="c-nome" name="nome" type="text" autocomplete="name" required aria-describedby="c-e-nome" />
+            <p class="field-error" id="c-e-nome"></p>
+          </div>
+          <div class="field">
+            <label for="c-email">E-mail</label>
+            <input id="c-email" name="email" type="email" autocomplete="email" inputmode="email" required aria-describedby="c-e-email" />
+            <p class="field-error" id="c-e-email"></p>
+          </div>
+          <div class="field">
+            <label for="c-msg">Mensagem</label>
+            <textarea id="c-msg" name="msg" rows="4" maxlength="500" required aria-describedby="c-e-msg"></textarea>
+            <p class="field-error" id="c-e-msg"></p>
+          </div>
+          <div class="form-actions">
+            <button class="btn" type="submit">Enviar mensagem</button>
+          </div>
+          <p class="contact-status" role="status" data-contact-status></p>
+        </form>
+        <p class="muted">Formulário de demonstração: nada é enviado e a mensagem não é guardada.</p>
+      </div>
       <div class="footer-map">
         <div class="shop-map" id="shop-map" role="region" aria-label="Mapa com a localização fictícia do Cintila Studio" data-popup-title="Cintila Studio" data-popup-note="Endereço fictício, só para demonstração"></div>
       </div>
@@ -215,3 +242,7 @@ const quotes = [
     </div>
   </footer>
 </Base>
+
+<script>
+  import '../scripts/contato.ts';
+</script>

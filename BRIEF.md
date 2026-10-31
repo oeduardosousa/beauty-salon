@@ -23,7 +23,8 @@ Secondary: prospective salon clients, so the demo should feel like a real site a
 - Booking: a four-step wizard (service, stylist, date and time, details).
 - Gallery and reviews: before and after work and testimonials (placeholder).
 - Contact, hours, and map: address, opening hours, map link, and a contact form.
-- Simulated admin view: lists the temporarily stored bookings. Demo only. (Status: shipped as the professional view at `/profissional`, which shows sample appointments. Bookings made in `/agendar` are listed in `/conta`. Listing them in the professional view is still open.)
+- Simulated admin view: lists the temporarily stored bookings. Demo only. (Status: shipped as the professional view at `/profissional`, which shows sample appointments plus a "Reservas do site" list of the bookings made in `/agendar` in the same tab. They are also listed in `/conta` once a demo account exists.)
+- Contact form: shipped in the home page footer as a validated, simulated form. Nothing is sent or stored.
 
 Language: Portuguese only.
 

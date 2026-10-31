@@ -375,6 +375,13 @@ function init() {
   }, { signal });
 
   goTo(1, true);
+  // A service card on the home page links here with ?servico=<id>: that choice is made, so start at step 2.
+  const preset = new URLSearchParams(location.search).get('servico');
+  const presetInput = preset ? form.querySelector<HTMLInputElement>(`input[name="servico"][value="${CSS.escape(preset)}"]`) : null;
+  if (presetInput) {
+    presetInput.checked = true;
+    goTo(2, true);
+  }
   // Keep the first load from stealing focus: goTo focuses the heading, so undo that on init.
   (document.activeElement as HTMLElement | null)?.blur();
 }

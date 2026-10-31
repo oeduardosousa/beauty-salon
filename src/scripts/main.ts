@@ -146,9 +146,9 @@ function initPage() {
     signal.addEventListener('abort', () => { mapIo.disconnect(); map?.remove(); });
   }
 
-  // Hide the phone booking button while the booking band is on screen.
+  // Hide the phone booking button while a booking entry point (hero buttons, band, wizard) is on screen.
   const sticky = document.getElementById('sticky-cta');
-  const bookingParts = document.querySelectorAll('.band, .booking');
+  const bookingParts = document.querySelectorAll('.hero-actions, .band, .booking');
   if (sticky && bookingParts.length && 'IntersectionObserver' in window) {
     const visible = new Set<Element>();
     const io = new IntersectionObserver((entries) => {

@@ -16,7 +16,7 @@
     grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   }
   .site-header .container:has(.header-switch) > .wordmark { justify-self: start; }
-  .site-header .container:has(.header-switch) > .menu-btn,
+  .site-header .container:has(.header-switch) > .header-end,
   .site-header .container:has(.header-switch) > .nav-desktop { justify-self: end; }
 }
 
@@ -33,6 +33,7 @@
 }
 .site-header.on-ink .role-switch { --sw-bg: var(--paper); --sw-fg: var(--ink); }
 .menu-overlay .role-switch { --sw-bg: var(--paper); --sw-fg: var(--ink); max-width: 360px; margin-bottom: 40px; }
+.menu-overlay .role-opt { min-height: 44px; }
 .role-thumb {
   position: absolute;
   inset: 4px auto 4px 4px;
@@ -206,7 +207,8 @@ html[data-nav='role-client']::view-transition-new(root) { mix-blend-mode: normal
 .appt[data-status='concluido'] .chip { background: var(--ink); color: var(--paper); }
 .chip--rose { background: var(--rose); }
 .appt-main { transition: opacity 200ms var(--ease-out); }
-.appt[data-status='concluido'] .appt-main { opacity: 0.7; }
+/* A finished visit steps back with a hairline outline, not by fading its text below AA contrast. */
+.appt[data-status='concluido'] { background: transparent; box-shadow: inset 0 0 0 1.5px var(--hairline); }
 
 .clients { display: grid; gap: 10px; }
 .client { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: 18px; background: var(--paper); }

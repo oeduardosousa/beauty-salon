@@ -197,7 +197,8 @@ The desk is built from centered cards on the paper background. The booking wizar
 - Breakpoints: 480, 768, 1024, 1440. Design at 390 and 1440 first, and verify there is no horizontal scrolling at either.
 - Below 768px: the pinned horizontal services track becomes a vertical stack, the custom cursor is removed, and parallax amplitude is halved.
 - Touch targets are at least 44×44px, with 8px between neighbours.
-- The sticky "Agendar" pill is always reachable: in the header from 768px up, and as a bottom-fixed full-width button on phones that hides while the wizard is open.
+- The sticky "Agendar" pill is always reachable: in the header from 768px up (beside Menu below 1760px, inside the link bar above it), and as a bottom-fixed full-width button on phones that hides while the hero buttons, the booking band or the wizard is on screen.
+- Service cards link to `/agendar?servico=<id>`; the wizard opens at step 2 with that service chosen. Deep links to `/agendar`, `/conta` and `/profissional` open directly; only the home page sends a first visit to the gateway.
 - Navigation collapses to a full-screen overlay menu below 768px. Menu items are display-size type.
 - The wizard keeps Back and Next fixed at the bottom of the dialog on phones, never below the fold.
 
@@ -239,7 +240,7 @@ A centered card at `/agendar` with a four-dot stepper (Serviço, Profissional, H
 Five to nine long parallel curves in 1.5px strokes (Hairline on paper, 20% paper on ink), drawn in as the chapter enters and drifting slowly at 0.9× scroll speed. They are the only background decoration.
 
 ### Professional view (demo)
-The `/profissional` page: summary tiles, a sample day agenda whose statuses (pendente, confirmado, concluído) can be advanced, recent clients, and weekly availability switches. A "Restaurar exemplo" button resets it. It is clearly labelled as a demonstration, has no login, and uses invented sample data kept in the tab's session storage. Bookings made in `/agendar` appear in `/conta` (Minha conta), not here.
+The `/profissional` page: summary tiles, a sample day agenda whose statuses (pendente, confirmado, concluído) can be advanced, a "Reservas do site" list, recent clients, and weekly availability switches. A "Restaurar exemplo" button resets it. It is clearly labelled as a demonstration, has no login, and uses invented sample data kept in the tab's session storage. Bookings made in `/agendar` appear in "Reservas do site" (marked "Nova") and, once a demo account exists, in `/conta`. A finished visit is shown with a hairline outline, never by fading its text.
 
 ## Do's and Don'ts
 

@@ -25,6 +25,7 @@ const navByRole = {
   ],
   profissional: [
     { href: '/profissional#agenda', label: 'Agenda' },
+    { href: '/profissional#reservas', label: 'Reservas' },
     { href: '/profissional#clientes', label: 'Clientes' },
     { href: '/profissional#disponibilidade', label: 'Disponibilidade' },
   ],
@@ -48,9 +49,10 @@ const hasSwitch = role !== 'entrada';
     <ClientRouter />
     <script is:inline>
       (function () {
-        // First visit in this tab: send people to the "Sou cliente / Sou profissional" gateway.
+        // First visit to the home page in this tab: send people to the "Sou cliente / Sou profissional" gateway.
+        // Deep links (/agendar, /conta, /profissional) open as asked, so a shared link never loses its destination.
         try {
-          if (location.pathname.indexOf('/entrar') !== 0 && !sessionStorage.getItem('cintila-role')) {
+          if (location.pathname === '/' && !sessionStorage.getItem('cintila-role')) {
             location.replace('/entrar');
             return;
           }
@@ -98,7 +100,10 @@ const hasSwitch = role !== 'entrada';
           </nav>
         )}
         {nav.length > 0 && (
-          <button class="menu-btn label" type="button" id="menu-open" aria-expanded="false" aria-controls="menu">Menu</button>
+          <div class="header-end">
+            {role === 'cliente' && <a class="btn header-cta" href="/agendar">Agendar</a>}
+            <button class="menu-btn label" type="button" id="menu-open" aria-expanded="false" aria-controls="menu">Menu</button>
+          </div>
         )}
       </div>
     </header>

@@ -1,6 +1,6 @@
 // Simulated professional dashboard: appointment statuses and weekly availability, kept in sessionStorage.
 import { prefersReducedMotion, restartAnimation } from './shared';
-import { clearPro, getAccount, getPro, savePro, type Status } from './session';
+import { clearPro, getAccount, getBookings, getPro, savePro, type Status } from './session';
 import { STATUS_ACTION, STATUS_LABEL, STATUS_NEXT } from '../data/status';
 
 const money = (n: number) => `R$ ${n.toLocaleString('pt-BR')}`;
@@ -67,6 +67,37 @@ function init() {
     demo.querySelector('[data-demo-initial]')!.textContent = account.nome.trim().charAt(0).toUpperCase();
   }
 
+  // Bookings made in /agendar (same tab) arrive here, soonest first.
+  const siteList = page.querySelector<HTMLElement>('[data-site-bookings]')!;
+  const bookings = [...getBookings()].sort((a, b) => `${a.data} ${a.hora}`.localeCompare(`${b.data} ${b.hora}`));
+  page.querySelector<HTMLElement>('[data-site-empty]')!.hidden = bookings.length > 0;
+  siteList.replaceChildren(
+    ...bookings.map((b) => {
+      const li = document.createElement('li');
+      li.className = 'appt';
+      const time = document.createElement('p');
+      time.className = 'appt-time';
+      time.textContent = b.hora;
+      const day = document.createElement('small');
+      day.className = 'label muted';
+      day.textContent = new Date(`${b.data}T00:00`).toLocaleDateString('pt-BR', { weekday: 'short', day: '2-digit', month: 'short' }).replace(/\./g, '');
+      time.append(day);
+      const main = document.createElement('div');
+      main.className = 'appt-main';
+      const who = document.createElement('h3');
+      who.textContent = b.nome;
+      const what = document.createElement('p');
+      what.className = 'muted';
+      what.textContent = `${b.servico} com ${b.profissional} · ${b.preco} (preço de exemplo)`;
+      main.append(who, what);
+      const chip = document.createElement('span');
+      chip.className = 'chip chip--rose';
+      chip.textContent = 'Nova';
+      li.append(time, main, chip);
+      return li;
+    }),
+  );
+
   page.querySelector('#pro-reset')!.addEventListener('click', () => {
     clearPro();
     state.status = {};
@@ -87,7 +118,7 @@ function initNav(page: HTMLElement) {
   const { signal } = navController;
   const reduced = prefersReducedMotion();
   const links = [...document.querySelectorAll<HTMLAnchorElement>('.nav-desktop a[href*="#"], .menu-overlay nav a[href*="#"]')];
-  const sections = ['agenda', 'clientes', 'disponibilidade']
+  const sections = ['agenda', 'reservas', 'clientes', 'disponibilidade']
     .map((id) => document.getElementById(id))
     .filter((el): el is HTMLElement => !!el);
   const pad = () => parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;

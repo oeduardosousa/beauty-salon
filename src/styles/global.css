@@ -77,6 +77,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   font-weight: 600;
 }
 .skip-link:focus { top: 16px; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
 .container {
   width: 100%;
@@ -251,9 +252,13 @@ button { font: inherit; color: inherit; cursor: pointer; }
 }
 
 .site-header .btn { min-height: 44px; padding: 10px 24px; }
+/* Booking stays one tap away: the pill sits beside Menu from tablet width up (the wide bar carries its own). */
+.header-end { display: flex; align-items: center; gap: 12px; }
+.header-cta { display: none; }
+@media (min-width: 768px) { .header-cta { display: inline-flex; } }
 @media (min-width: 1760px) {
   .nav-desktop { display: flex; align-items: center; gap: 16px; }
-  .menu-btn { display: none; }
+  .header-end { display: none; }
 }
 
 /* overlay menu (phones) */
@@ -418,6 +423,7 @@ html:not(.js-motion) .hl { color: var(--ink); }
 }
 .card dl { display: flex; justify-content: space-between; align-items: end; gap: 16px; margin: 0; }
 .card dd { margin: 0; }
+.card-book { justify-self: start; display: inline-flex; align-items: center; min-height: 44px; }
 .price small { display: block; margin-top: 4px; font-family: var(--font-body); font-size: 0.8125rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
 @media (min-width: 768px) and (max-width: 1023px) {
   .track { grid-template-columns: repeat(2, 1fr); }
@@ -524,6 +530,27 @@ html:not(.js-motion) .hl { color: var(--ink); }
 .footer-grid h2 { margin-bottom: 12px; color: var(--rose); }
 .footer-grid p, .footer-grid li { color: var(--paper); }
 .footer-grid .muted { color: var(--muted-on-ink); }
+/* Contact form on the plum footer: paper fields, paper focus ring, error colour that clears AA on ink. */
+.footer-contact { margin-top: 64px; max-width: 520px; }
+.footer-contact h2 { margin-bottom: 16px; color: var(--rose); }
+.footer-contact .muted { margin-top: 16px; color: var(--muted-on-ink); }
+.contact-form { max-width: none; }
+.contact-form textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 12px 16px;
+  border: 1.5px solid var(--paper);
+  border-radius: 14px;
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+  resize: vertical;
+}
+.contact-form input:focus-visible, .contact-form textarea:focus-visible { outline: 3px solid var(--rose); outline-offset: 2px; }
+.contact-form .field-error { color: #ff8a80; }
+.contact-form [aria-invalid='true'] { border-color: #ff8a80; box-shadow: none; }
+.contact-status { color: #5cd393; font-weight: 500; }
+.contact-status:empty { display: none; }
 .footer-demo { margin-top: 64px; padding-top: 24px; border-top: 1px solid rgb(255 245 243 / 0.2); color: var(--muted-on-ink); max-width: 70ch; }
 .giant {
   font-size: clamp(1.5rem, 17vw, 15.5rem);
@@ -654,7 +681,7 @@ html[data-nav='plain']::view-transition-new(root) { mix-blend-mode: normal; anim
 .shop-map:focus-visible, .shop-map .leaflet-container:focus-visible { outline: 3px solid var(--rose); outline-offset: -3px; }
 .shop-pin { background: none; border: 0; filter: drop-shadow(0 6px 8px rgb(43 14 38 / 0.45)); }
 .footer-credit { margin-top: 16px; color: var(--muted-on-ink); }
-.footer-credit a { color: var(--paper); text-underline-offset: 4px; }
+.footer-credit a { display: inline-block; padding-block: 10px; color: var(--paper); text-underline-offset: 4px; }
 .footer-credit a:hover { color: var(--rose); }
 
 /* "Ver serviços": the arrow nudges down on hover and drops on click. */
