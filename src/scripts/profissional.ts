@@ -152,7 +152,7 @@ function initNav(page: HTMLElement) {
   // Entrance: tiles, appointments, and panels rise once as they scroll into view.
   if (reduced || !('IntersectionObserver' in window)) return;
   const items = [...page.querySelectorAll<HTMLElement>('.tile, .appt, .panels .panel, .client:not([hidden]), .day')];
-  items.forEach((el, i) => {
+  items.forEach((el) => {
     el.classList.add('rv');
     el.style.setProperty('--rv', String(el.matches('.appt, .tile, .client, .day') ? [...(el.parentElement?.children ?? [])].indexOf(el) : 0));
   });
