@@ -23,7 +23,7 @@ Secondary: prospective salon clients, so the demo should feel like a real site a
 - Booking: a four-step wizard (service, stylist, date and time, details).
 - Gallery and reviews: before and after work and testimonials (placeholder).
 - Contact, hours, and map: address, opening hours, map link, and a contact form.
-- Simulated admin view: lists the temporarily stored bookings. Demo only.
+- Simulated admin view: lists the temporarily stored bookings. Demo only. (Status: shipped as the professional view at `/profissional`, which shows sample appointments. Bookings made in `/agendar` are listed in `/conta`. Listing them in the professional view is still open.)
 
 Language: Portuguese only.
 
@@ -39,7 +39,7 @@ Out of scope: payments, user accounts, a real database, SMS reminders, and any o
 
 ## Design direction
 
-Chosen during design review: the booking wizard direction (system gray dialogs, beveled chrome, linear steps). The full design decision is recorded in the surface brief under `.impeccable/`.
+Cinematic blush-and-plum site with a centered four-step booking card. The system is recorded in `DESIGN.md`; the original surface brief (an installer-style wizard that was later redesigned) is kept under `.impeccable/surfaces/`.
 
 ## Stack
 

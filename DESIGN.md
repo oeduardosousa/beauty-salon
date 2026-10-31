@@ -1,6 +1,6 @@
 ---
 name: Cintila Studio
-description: Um salão editorial e cinematográfico na vitrine, com a marcação como um assistente de instalação em cinza de sistema.
+description: Um salão editorial e cinematográfico na vitrine, com a marcação num cartão central de quatro passos, no mesmo vocabulário suave e rosé.
 colors:
   paper: "#FFF5F3"
   paper-deep: "#FBE3E4"
@@ -12,9 +12,6 @@ colors:
   muted: "#6B4560"
   muted-on-ink: "#E0C0D4"
   hairline: "#F0CFD4"
-  system-gray: "#C0C0C0"
-  bevel-light: "#FFFFFF"
-  bevel-shadow: "#6B6B6B"
   success: "#1D6B43"
   success-on-ink: "#5CD393"
   warning: "#8A5200"
@@ -60,16 +57,6 @@ typography:
     fontWeight: 500
     lineHeight: 1.2
     letterSpacing: "0.14em"
-  dialog:
-    fontFamily: "Tahoma, 'Segoe UI', Verdana, sans-serif"
-    fontSize: "1rem"
-    fontWeight: 400
-    lineHeight: 1.4
-  dialog-title:
-    fontFamily: "Tahoma, 'Segoe UI', Verdana, sans-serif"
-    fontSize: "1.125rem"
-    fontWeight: 700
-    lineHeight: 1.25
 rounded:
   none: "0px"
   sm: "2px"
@@ -108,29 +95,6 @@ components:
     textColor: "{colors.rose-text}"
     typography: "{typography.label}"
     padding: "8px 0"
-  dialog-window:
-    backgroundColor: "{colors.system-gray}"
-    textColor: "{colors.ink}"
-    typography: "{typography.dialog}"
-    rounded: "{rounded.none}"
-    padding: "24px"
-  dialog-button:
-    backgroundColor: "{colors.system-gray}"
-    textColor: "{colors.ink}"
-    typography: "{typography.dialog}"
-    rounded: "{rounded.none}"
-    padding: "8px 24px"
-    height: "44px"
-  dialog-button-default:
-    backgroundColor: "{colors.rose}"
-    textColor: "{colors.ink}"
-  dialog-field:
-    backgroundColor: "{colors.bevel-light}"
-    textColor: "{colors.ink}"
-    typography: "{typography.dialog}"
-    rounded: "{rounded.none}"
-    padding: "8px 12px"
-    height: "44px"
   nav-bar:
     backgroundColor: "{colors.paper}"
     textColor: "{colors.ink}"
@@ -149,7 +113,7 @@ components:
     padding: "96px 32px"
 ---
 
-<!-- SEED: established with the user before implementation. No code exists yet. Re-run `/impeccable document` once there is code, so the real tokens and the .impeccable/design.json sidecar can be extracted. Every value above is a decision, not an observation. -->
+<!-- Updated after the booking wizard was redesigned. The original installer-style wizard (system gray, bevelled dialogs) and the bookings-table admin view were replaced; see Components below. Re-run `/impeccable document` to regenerate tokens from the code. -->
 
 # Design System: Cintila Studio
 
@@ -157,14 +121,14 @@ components:
 
 **Creative North Star: "The Cutting Room"**
 
-A salon cuts hair, and a film cuts footage. The public site plays like a short edited reel: big, elegant type, hard scene changes between a blush chapter and a deep plum chapter, and a single saturated rosé that works like a slate clap. Behind the reel sits the booking desk, where the visitor does the one thing that matters. That desk keeps the shareware-installer wizard chosen in the surface brief: system-gray dialogs, bevelled edges, a progress bar that fills in blocks, and Back and Next at the bottom right. The two halves are deliberately different. The reel is the performance, and the wizard is the ticket desk behind it, where nothing moves unless it helps.
+A salon cuts hair, and a film cuts footage. The public site plays like a short edited reel: big, elegant type, hard scene changes between a blush chapter and a deep plum chapter, and a single saturated rosé that works like a slate clap. Behind the reel sit the working screens (booking, account, professional view), where the visitor does the one thing that matters. The booking page is a centered card with a four-step stepper, option cards and Back and Next buttons. The two halves are deliberately different. The reel is the performance, and the working screens are the ticket desk behind it, where nothing moves unless it helps.
 
 The direction takes principles, not assets, from the research. From landonorris.com: one big manifesto sentence mixing a heavy grotesque with a serif accent, a background that flips from light to dark as you scroll, a scattered collage at different scroll speeds, and a single neon-like accent on a small pill CTA. From Hershesons: a rating with a count and quotes that name a place. From Rita Hazan: the person is the hero, and CTAs are impossible to miss on mobile. From Drybar: Book is always one tap away, and services have names with personality. From Aesop: warm paper instead of white, and wide, calm margins. From Lusion: a loader that fills in discrete blocks, which matches the wizard's own progress bar. None of their type, colors, imagery, copy or layouts is reused.
 
 All imagery, names, prices, staff and reviews are placeholders. Anything that looks like a portrait or a result is marked "Imagem ilustrativa" until the owner supplies real, licensed material.
 
 **Key Characteristics:**
-- Two registers, one rule: the reel (home and marketing pages) is cinematic; the desk (wizard and admin) is quiet and square.
+- Two registers, one rule: the reel (the home page) is cinematic; the desk (booking, account and professional view) is quiet and still.
 - Chapters alternate between blush paper (`#FFF5F3`) and deep plum ink (`#2B0E26`). There is no user dark-mode toggle; the site is already both.
 - One accent, rosé (`#F46FA1`), used on small, decisive things, with soft lilac as a quiet second tint in imagery.
 - Type is the main image. Large Cormorant in mixed case, with the same family in italic, set in rosé, for the one word per headline that carries emotion.
@@ -191,11 +155,6 @@ Blush and petal pinks for the light chapters, a deep plum for the dark ones, and
 - **Orchid Mist** (`#E0C0D4`): secondary text on plum (10.61:1).
 - **Hairline** (`#F0CFD4`): 1px dividers and strand lines on paper. Decorative only; never the sole boundary of an input.
 
-### System chrome (wizard and admin only)
-- **System Gray** (`#C0C0C0`): dialog body and buttons. Plum on it is about 10:1.
-- **Bevel Light** (`#FFFFFF`) and **Bevel Shadow** (`#6B6B6B`): the raised and sunken edges of dialogs, buttons and fields.
-- The wizard does not exist yet. Revisit this chrome against the feminine direction before building it (soft plum and petal instead of Windows gray is the likely move).
-
 ### Status
 - **Success** (`#1D6B43`, 5.76:1 on paper; `#5CD393` on ink, 9.75:1)
 - **Warning** (`#8A5200`, 5.67:1 on paper)
@@ -212,7 +171,6 @@ Status is always paired with an icon and a word; color alone never carries meani
 **Display Font:** Cormorant (variable, weight 300–700; fallback Cormorant Garamond, Georgia). An elegant, high-contrast serif used at weight 500–600 in mixed case.
 **Accent:** Cormorant Italic, in Raspberry Link on light chapters and Rosé on plum. One to three words per headline, never whole paragraphs.
 **Body Font:** Jost (variable, weight 100–900). A soft geometric sans.
-**Dialog Font:** system Tahoma / Segoe UI / Verdana. No webfont, because the installer is meant to look like the operating system.
 
 **Character:** A fashion-magazine serif with one italic word in pink, over a clean, friendly sans. Both faces cover the Portuguese diacritics (ç, ã, õ, é, ê, â). Fonts are self-hosted through `@fontsource-variable/cormorant` and `@fontsource-variable/jost` (Latin subsets, `font-display: swap`), and the two Latin roman files are preloaded. Cormorant uses lining numerals (`lnum`) so prices read as prices. `lang="pt-BR"` and `hyphens: auto` let long Portuguese words such as "coloração" and "hidratação" break instead of overflowing at 390px.
 
@@ -223,7 +181,7 @@ Status is always paired with an icon and a word; color alone never carries meani
 - **Body Large** (400, 1.25rem, 1.5): chapter intro copy, maximum 60ch.
 - **Body** (400, 1rem, 1.6): everything else, 65ch maximum. Never below 16px.
 - **Label** (500, 0.8125rem, +0.14em, uppercase): navigation, tags, captions, price units. Used for short strings only.
-- **Dialog** (400, 1rem, 1.4) and **Dialog Title** (700, 1.125rem): wizard and admin only.
+- **Step title** (600, 2rem, 1.05): the booking wizard's step headings, in the display face.
 
 ### Named Rules
 **The One Italic Word Rule.** The pink italic marks one word per headline, and it carries the meaning ("o seu *cabelo*"). If two words are italic, none of them is special.
@@ -233,7 +191,7 @@ Status is always paired with an icon and a word; color alone never carries meani
 
 The reel uses a 12-column grid inside a 1280px maximum content width (full-bleed for media and chapter backgrounds) with gutters of 16px on phones, 32px on tablets, and 48px on desktop. Spacing follows a 4px base: 4, 8, 16, 24, 32, 48, 64, 96, 144. Section padding is 96px on phones and 144px on desktop, so chapters breathe. Layouts are asymmetric on purpose: type is pushed to one edge and media to the other, and the collage scatters across columns at different sizes. Centered stacks are the exception, not the default.
 
-The desk (wizard and admin) is a single fixed-width dialog (560px, 100% minus 16px on phones) centered on a dithered Raised Ink backdrop. The left 120px of the wizard dialog carries the dithered banner (hidden below 480px, where the progress bar and step title stack instead).
+The desk is built from centered cards on the paper background. The booking wizard is a white card up to 720px wide (100% on phones) with a 1.5px Hairline border and soft corners. On phones the stepper shows only the current step's label.
 
 ### Responsive rules
 - Breakpoints: 480, 768, 1024, 1440. Design at 390 and 1440 first, and verify there is no horizontal scrolling at either.
@@ -245,14 +203,14 @@ The desk (wizard and admin) is a single fixed-width dialog (560px, 100% minus 16
 
 ## Elevation & Depth
 
-The reel is flat. Chapters have no shadows; depth is made by switching between paper and ink, by large overlaps, and by parallax. The desk is flat in a different way: depth is a 2px bevel (Bevel Light on the top and left, Bevel Shadow on the bottom and right, Deep Plum as the outer 1px line), never a blur. Fields are sunken with the bevel reversed. No soft shadows exist anywhere in the system.
+The reel is flat. Chapters have no shadows; depth is made by switching between paper and ink, by large overlaps, and by parallax. The desk is flat too: cards are white with a 1.5px Hairline border and no shadow. No soft shadows exist anywhere in the system.
 
 ### Named Rules
-**The Bevel-Not-Blur Rule.** Anything inside the wizard that looks raised or sunken is made of hard 1–2px lines. A `box-shadow` with blur is a mistake.
+**The Border-Not-Blur Rule.** Anything inside the wizard that looks raised is made of a flat fill and a 1.5px border. A `box-shadow` with blur is a mistake.
 
 ## Shapes
 
-Soft and feminine, kept apart from the desk. The reel uses 24px rounded cards, quote tiles and frames, arch-shaped portraits (a 50% / 32% dome on top, 24px corners below) for the hero and the staff, and the pill for the Agendar CTA and tags. The desk is entirely square, with a radius of 0. Images may overlap each other. Circles appear only as the cursor and as step indicators. Strand lines are 1.5px strokes, never filled shapes.
+Soft and feminine throughout. The reel uses 24px rounded cards, quote tiles and frames, arch-shaped portraits (a 50% / 32% dome on top, 24px corners below) for the hero and the staff, and the pill for the Agendar CTA and tags. The desk shares the soft corners: rounded cards and pill buttons. Images may overlap each other. Circles appear only as the cursor and as step indicators. Strand lines are 1.5px strokes, never filled shapes.
 
 ## Components
 
@@ -260,13 +218,13 @@ Soft and feminine, kept apart from the desk. The reel uses 24px rounded cards, q
 - **Primary (reel):** a rosé pill, plum label in uppercase, 52px tall, `16px 32px`. Hover: a plum fill rises from the bottom (clip-path, 240ms ease-out) and the label turns paper. Focus: a 3px Deep Plum outline with a 3px paper offset, which stays visible on both paper and ink chapters. Active: `scale(0.97)`.
 - **Secondary:** paper pill with a 1.5px ink border; same hover sweep.
 - **Quiet:** Raspberry Link text with an underline that draws in on hover.
-- **Dialog button:** System Gray, square, 44px tall, bevelled; pressing inverts the bevel. **Default** dialog button is rosé with a plum label, with an extra 1px dotted focus line inside it. **Disabled** is gray text on gray, and the reason is always shown in text (for example "Escolha um serviço para continuar").
+- **Wizard button:** a pill, Back and Next at the bottom of the card. The default button (Next, then Concluir) is rosé with a plum label. **Disabled** controls always show the reason in text (for example "Escolha um serviço para continuar").
 
 ### Cards (services, staff)
 Petal, 24px radius, 28px padding, no border and no shadow. Service cards carry a name, duration and a placeholder price marked "preço de exemplo". Staff cards lead with a large arch-shaped placeholder image and an italic first name.
 
-### Inputs / Fields (wizard)
-Sunken white field, 44px tall, a visible label above (never placeholder-only), 16px text so iOS does not zoom. Error: the field gets a 2px Error border plus an icon and a message below ("Informe um celular válido"). Radio rows for services are full-width, 44px minimum, with the whole row clickable.
+### Inputs / Fields (wizard and account)
+White field, 44px tall, a visible label above (never placeholder-only), 16px text so iOS does not zoom. Error: the field gets a 2px Error border plus an icon and a message below ("Informe um celular válido"). Radio rows for services are full-width, 44px minimum, with the whole row clickable.
 
 ### Navigation
 A 72px paper bar with the wordmark on the left, five labels (Serviços, Equipe, Galeria, Contato, Agendar) and the pill. It sits over the hero without a background at first and gains a paper background after 80px of scroll. When the page is in an ink chapter, the bar switches to paper text on transparent. Active page: an underline that is 2px thick.
@@ -274,19 +232,19 @@ A 72px paper bar with the wordmark on the left, five labels (Serviços, Equipe, 
 ### Footer
 An ink chapter with the contact block, hours, map link and a giant wordmark that fills the width. A permanent line states that the site is a portfolio demo and that bookings are simulated.
 
-### Signature: The Installer Wizard
-A System Gray dialog with a title bar (step name and "Passo 1 de 4"), a 120px dithered rosé-plum-blush banner on the left, a ten-block progress bar below the step title, the step content, and a bottom row with Back and Next. Next is disabled until the step is valid, and Back keeps entered values. The confirmation step ends in a "Concluir" default button and then a confirmation dialog with simulated email and a calendar file.
+### Signature: The Booking Stepper
+A centered card at `/agendar` with a four-dot stepper (Serviço, Profissional, Horário, Detalhes) joined by an ink progress line, a summary of the picks so far as pills, the step content as option cards or day and time chips, and Back and Next buttons. Next is disabled until the step is valid, and Back keeps entered values. The last step ends in "Concluir", then a confirmation with a simulated email and a calendar file.
 
 ### Signature: The Strand Lines
 Five to nine long parallel curves in 1.5px strokes (Hairline on paper, 20% paper on ink), drawn in as the chapter enters and drifting slowly at 0.9× scroll speed. They are the only background decoration.
 
-### Admin (demo)
-The same dialog chrome with a permanent "DEMO – sem login, dados guardados só neste navegador" strip, a table of stored bookings with square, bevelled column headers, and a "Limpar reservas" button. Because it is an operating view, nothing animates here.
+### Professional view (demo)
+The `/profissional` page: summary tiles, a sample day agenda whose statuses (pendente, confirmado, concluído) can be advanced, recent clients, and weekly availability switches. A "Restaurar exemplo" button resets it. It is clearly labelled as a demonstration, has no login, and uses invented sample data kept in the tab's session storage. Bookings made in `/agendar` appear in `/conta` (Minha conta), not here.
 
 ## Do's and Don'ts
 
 ### Do:
-- **Do** keep the reel and the desk visibly separate: cinematic and asymmetric outside, square and still inside the wizard.
+- **Do** keep the reel and the desk visibly separate: cinematic and asymmetric on the home page, quiet and still inside the working screens.
 - **Do** use rosé as fill only, with plum text, and Raspberry Link for rosé-colored text.
 - **Do** let type be the hero image and mark every placeholder image "Imagem ilustrativa".
 - **Do** show a visible focus ring, a text reason for every disabled control, and plain-Portuguese error messages.
@@ -297,7 +255,7 @@ The same dialog chrome with a permanent "DEMO – sem login, dados guardados só
 - **Don't** put a real person's face, a real review, a real price or a real address on the site. These are placeholders (see PRODUCT.md).
 - **Don't** reuse another site's type, colors, photos, copy or exact layout. The research gave principles only.
 - **Don't** use a box-shadow with blur anywhere, including hover states.
-- **Don't** animate anything inside the wizard or admin beyond the step change and the block progress.
+- **Don't** animate anything inside the wizard or the professional view beyond the step change, the stepper progress and small state feedback.
 
 ## Accessibility
 
