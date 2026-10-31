@@ -26,12 +26,17 @@ export async function initMotion(): Promise<() => void> {
   root.classList.add('motion-ready');
 
   /* ---------- Smooth scroll (Lenis, driven by GSAP's ticker) ---------- */
-  const lenis = new Lenis({ lerp: 0.1 });
-  lenis.on('scroll', ScrollTrigger.update);
-  const tick = (t: number) => lenis.raf(t * 1000);
-  gsap.ticker.add(tick);
-  gsap.ticker.lagSmoothing(0);
+  // Mouse and trackpad only. On touch screens Lenis would replace the browser's native momentum
+  // scrolling with JavaScript, which feels laggy and fights the address-bar collapse on phones.
+  const lenis = matchMedia('(hover: hover) and (pointer: fine)').matches ? new Lenis({ lerp: 0.1 }) : null;
+  const tick = (t: number) => lenis?.raf(t * 1000);
+  if (lenis) {
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add(tick);
+    gsap.ticker.lagSmoothing(0);
+  }
   document.addEventListener('click', (e) => {
+    if (!lenis) return; // touch: CSS scroll-behavior and scroll-padding handle in-page anchors
     const a = (e.target as Element).closest<HTMLAnchorElement>('a[href*="#"]');
     if (!a) return;
     const url = new URL(a.href, location.href);
@@ -77,7 +82,7 @@ export async function initMotion(): Promise<() => void> {
       if (!loader || !root.classList.contains('has-loader')) return resolve();
       const count = q('#loader-count')!;
       const blocks = qa('#loader-blocks i');
-      lenis.stop();
+      lenis?.stop();
       let done = false;
       const finish = () => {
         if (done) return;
@@ -87,7 +92,7 @@ export async function initMotion(): Promise<() => void> {
           clipPath: 'inset(0 0 100% 0)',
           duration: 0.7,
           ease: EASE_IN_OUT,
-          onComplete: () => { root.classList.remove('has-loader'); if (!destroyed) lenis.start(); },
+          onComplete: () => { root.classList.remove('has-loader'); if (!destroyed) lenis?.start(); },
         });
         resolve();
       };
@@ -162,9 +167,11 @@ export async function initMotion(): Promise<() => void> {
       if (hl) ScrollTrigger.create({ trigger: hl, start: 'top 60%', once: true, onEnter: () => hl.classList.add('is-on') });
     }
 
-    // Strand lines: drawn in as each chapter enters, drifting slowly.
-    qa<SVGElement>('.chapter > .strands').forEach((s) => {
-      gsap.fromTo(s, { yPercent: -4 }, { yPercent: 4, ease: 'none', scrollTrigger: { trigger: s.parentElement!, scrub: true } });
+    // Strand lines: drawn in as each chapter enters, drifting slowly (tablet and up; phones just draw them in).
+    mm.add('(min-width: 768px)', () => {
+      qa<SVGElement>('.chapter > .strands').forEach((s) => {
+        gsap.fromTo(s, { yPercent: -4 }, { yPercent: 4, ease: 'none', scrollTrigger: { trigger: s.parentElement!, scrub: true } });
+      });
     });
     qa<SVGPathElement>('.chapter > .strands path').forEach((p) => {
       gsap.fromTo(p, { strokeDasharray: 1, strokeDashoffset: 1 }, {
@@ -175,12 +182,12 @@ export async function initMotion(): Promise<() => void> {
       });
     });
 
-    // Parallax: +-8% of frame height on desktop, halved on phones. Images are 112% tall.
-    mm.add({ wide: '(min-width: 768px)', narrow: '(max-width: 767px)' }, (c) => {
-      const amp = c.conditions!.wide ? 4.5 : 2.2;
+    // Parallax: +-8% of frame height, tablet and up. Phones keep the frames still (a scrubbed
+    // transform per frame costs more than it adds on a small screen). Images are 112% tall.
+    mm.add('(min-width: 768px)', () => {
       qa('.frame .img-inner').forEach((img) => {
-        gsap.fromTo(img, { yPercent: -amp }, {
-          yPercent: amp,
+        gsap.fromTo(img, { yPercent: -4.5 }, {
+          yPercent: 4.5,
           ease: 'none',
           scrollTrigger: { trigger: img.parentElement!, start: 'top bottom', end: 'bottom top', scrub: true },
         });
@@ -313,7 +320,7 @@ export async function initMotion(): Promise<() => void> {
     ctx.revert();
     ScrollTrigger.getAll().forEach((t) => t.kill());
     gsap.ticker.remove(tick);
-    lenis.destroy();
+    lenis?.destroy();
     root.classList.remove('motion-ready', 'cursor-on');
   }
 
@@ -333,8 +340,15 @@ export async function initMotion(): Promise<() => void> {
     cursorFx();
   });
   ScrollTrigger.refresh();
+  // The hero scene runs a dozen endless 3D animations; pause them once it scrolls out of view.
+  const heroScene = q('.hero-scene');
+  if (heroScene && 'IntersectionObserver' in window) {
+    const sceneIo = new IntersectionObserver(([en]) => heroScene.classList.toggle('is-paused', !en.isIntersecting));
+    sceneIo.observe(heroScene);
+    signal.addEventListener('abort', () => sceneIo.disconnect());
+  }
   // Arriving from another page with a hash (e.g. /agendar to /#equipe): glide there.
   const hashTarget = location.hash.length > 1 ? document.querySelector<HTMLElement>(location.hash) : null;
-  if (hashTarget) lenis.scrollTo(hashTarget, { offset: hashTarget.id === 'contato' ? parseFloat(getComputedStyle(root).scrollPaddingTop) || 0 : 0, duration: 1.5 });
+  if (hashTarget && lenis) lenis.scrollTo(hashTarget, { offset: hashTarget.id === 'contato' ? parseFloat(getComputedStyle(root).scrollPaddingTop) || 0 : 0, duration: 1.5 });
   return destroy;
 }

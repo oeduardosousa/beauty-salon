@@ -232,6 +232,24 @@ const sparks = [
     50% { opacity: 1; transform: scale(1.15); }
   }
 
+  /* Scrolled out of view (set from motion.ts): stop every endless animation. */
+  .hero-scene.is-paused .scene-sway,
+  .hero-scene.is-paused .flower,
+  .hero-scene.is-paused .petal i,
+  .hero-scene.is-paused .prop > svg,
+  .hero-scene.is-paused .spark > svg { animation-play-state: paused; }
+
+  /* Phones: the same scene, cheaper to paint. Blurred shadows and filters are re-rasterised
+     every frame on a 3D-transformed tree, so swap them for flat equivalents and keep the
+     rotation (the flower) while dropping the whole-scene sway. */
+  @media (max-width: 767px) {
+    .scene-sway { animation: none; transform: rotateY(-6deg) rotateX(4deg); }
+    .scene-backdrop { box-shadow: inset 0 0 0 1px rgb(244 111 161 / 0.25); }
+    .petal i { box-shadow: inset 0 0 0 1px rgb(255 245 243 / 0.28); }
+    .prop > svg { filter: none; }
+    .spark > svg { filter: none; }
+  }
+
   @media (min-width: 1024px) {
     .hero-scene { max-height: none; height: 72svh; aspect-ratio: auto; }
   }

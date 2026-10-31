@@ -40,6 +40,10 @@ html {
   hyphens: auto;
   scroll-padding-top: calc(var(--header-h) + 16px);
 }
+/* Touch screens scroll natively (no Lenis), so in-page anchors glide with the browser's own smooth scroll. */
+@media (pointer: coarse) and (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
 html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
 .lenis.lenis-stopped { overflow: clip; }
@@ -686,7 +690,7 @@ html[data-nav='plain']::view-transition-new(root) { mix-blend-mode: normal; anim
 
 /* "Ver serviços": the arrow nudges down on hover and drops on click. */
 .btn .arrow { display: inline-block; margin-left: 10px; transition: transform 260ms var(--ease-out); }
-.btn:hover .arrow { transform: translateY(3px); }
+@media (hover: hover) and (pointer: fine) { .btn:hover .arrow { transform: translateY(3px); } }
 .btn.is-going .arrow { animation: arrow-drop 700ms var(--ease-in-out); }
 @keyframes arrow-drop { 40% { transform: translateY(14px); opacity: 0; } 41% { transform: translateY(-14px); } 100% { transform: translateY(0); opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .btn.is-going .arrow { animation: none; } }
