@@ -1,5 +1,8 @@
 // Demo state lives in sessionStorage only: it survives a reload but disappears with the tab.
 // No account, booking or role ever leaves the browser.
+import type { Status } from '../data/status';
+export type { Status };
+
 export type Role = 'cliente' | 'profissional';
 
 export interface Account {
@@ -8,9 +11,6 @@ export interface Account {
   telefone: string;
   criadaEm: string;
 }
-
-/** Where an appointment stands in the professional view. */
-export type Status = 'pendente' | 'confirmado' | 'concluido';
 
 export interface ProState {
   status: Record<string, Status>;

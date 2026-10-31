@@ -1,8 +1,9 @@
 ---
 import Base from '../layouts/Base.astro';
+import { STATUS_ACTION, STATUS_LABEL, type Status } from '../data/status';
 
 // Everything below is an invented placeholder: names, services, prices and hours.
-const appointments = [
+const appointments: { id: string; time: string; dur: string; client: string; service: string; price: number; status: Status }[] = [
   { id: 'a1', time: '09:00', dur: '45 min', client: 'Helena R.', service: 'Corte Claquete', price: 90, status: 'concluido' },
   { id: 'a2', time: '10:00', dur: '3h', client: 'Beatriz M.', service: 'Luzes em Cena', price: 380, status: 'confirmado' },
   { id: 'a3', time: '14:00', dur: '50 min', client: 'Camila T.', service: 'Hidratação Close-up', price: 110, status: 'pendente' },
@@ -23,8 +24,6 @@ const days = [
   { key: 'sex', label: 'Sexta', on: true },
   { key: 'sab', label: 'Sábado', on: true },
 ];
-const statusLabel: Record<string, string> = { pendente: 'Pendente', confirmado: 'Confirmado', concluido: 'Concluído' };
-const actionLabel: Record<string, string> = { pendente: 'Confirmar', confirmado: 'Concluir', concluido: 'Reabrir' };
 ---
 
 <Base
@@ -60,8 +59,8 @@ const actionLabel: Record<string, string> = { pendente: 'Confirmar', confirmado:
                 <h3>{a.client}</h3>
                 <p class="muted">{a.service} · R$ {a.price} (preço de exemplo)</p>
               </div>
-              <span class="chip" data-chip>{statusLabel[a.status]}</span>
-              <button class="btn btn--secondary btn--sm" type="button" data-act>{actionLabel[a.status]}</button>
+              <span class="chip" data-chip>{STATUS_LABEL[a.status]}</span>
+              <button class="btn btn--secondary btn--sm" type="button" data-act>{STATUS_ACTION[a.status]}</button>
             </li>
           ))}
         </ul>

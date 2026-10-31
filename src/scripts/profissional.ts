@@ -1,10 +1,8 @@
 // Simulated professional dashboard: appointment statuses and weekly availability, kept in sessionStorage.
 import { prefersReducedMotion, restartAnimation } from './shared';
 import { clearPro, getAccount, getPro, savePro, type Status } from './session';
+import { STATUS_ACTION, STATUS_LABEL, STATUS_NEXT } from '../data/status';
 
-const LABEL: Record<Status, string> = { pendente: 'Pendente', confirmado: 'Confirmado', concluido: 'Concluído' };
-const ACTION: Record<Status, string> = { pendente: 'Confirmar', confirmado: 'Concluir', concluido: 'Reabrir' };
-const NEXT: Record<Status, Status> = { pendente: 'confirmado', confirmado: 'concluido', concluido: 'pendente' };
 const money = (n: number) => `R$ ${n.toLocaleString('pt-BR')}`;
 
 function init() {
@@ -29,14 +27,14 @@ function init() {
 
   function paint(row: HTMLElement, status: Status) {
     row.dataset.status = status;
-    row.querySelector('[data-chip]')!.textContent = LABEL[status];
-    row.querySelector('[data-act]')!.textContent = ACTION[status];
+    row.querySelector('[data-chip]')!.textContent = STATUS_LABEL[status];
+    row.querySelector('[data-act]')!.textContent = STATUS_ACTION[status];
   }
 
   for (const row of rows) {
     paint(row, state.status[row.dataset.id!] ?? (row.dataset.initial as Status));
     row.querySelector('[data-act]')!.addEventListener('click', () => {
-      const next = NEXT[row.dataset.status as Status];
+      const next = STATUS_NEXT[row.dataset.status as Status];
       paint(row, next);
       state.status[row.dataset.id!] = next;
       savePro(state);
@@ -45,15 +43,16 @@ function init() {
   }
   totals();
 
-  for (const sw of page.querySelectorAll<HTMLButtonElement>('[data-day]')) {
-    const apply = (on: boolean) => {
-      sw.setAttribute('aria-checked', String(on));
-      sw.closest('.day')!.querySelector('[data-hours]')!.textContent = on ? '9h às 19h' : 'Folga';
-    };
-    apply(state.days[sw.dataset.day!] ?? sw.dataset.default === 'true');
+  const switches = [...page.querySelectorAll<HTMLButtonElement>('[data-day]')];
+  const paintDay = (sw: HTMLButtonElement, on: boolean) => {
+    sw.setAttribute('aria-checked', String(on));
+    sw.closest('.day')!.querySelector('[data-hours]')!.textContent = on ? '9h às 19h' : 'Folga';
+  };
+  for (const sw of switches) {
+    paintDay(sw, state.days[sw.dataset.day!] ?? sw.dataset.default === 'true');
     sw.addEventListener('click', () => {
       const on = sw.getAttribute('aria-checked') !== 'true';
-      apply(on);
+      paintDay(sw, on);
       state.days[sw.dataset.day!] = on;
       savePro(state);
     });
@@ -73,11 +72,7 @@ function init() {
     state.status = {};
     state.days = {};
     for (const row of rows) paint(row, row.dataset.initial as Status);
-    for (const sw of page.querySelectorAll<HTMLButtonElement>('[data-day]')) {
-      const on = sw.dataset.default === 'true';
-      sw.setAttribute('aria-checked', String(on));
-      sw.closest('.day')!.querySelector('[data-hours]')!.textContent = on ? '9h às 19h' : 'Folga';
-    }
+    for (const sw of switches) paintDay(sw, sw.dataset.default === 'true');
     totals();
   });
   initNav(page);
