@@ -306,7 +306,6 @@ button { font: inherit; color: inherit; cursor: pointer; }
 /* ---------- Chapters ---------- */
 .chapter { position: relative; padding-block: var(--section-pad); }
 .chapter--ink { background: var(--ink); color: var(--paper); }
-.chapter--deep { background: var(--paper-deep); }
 .on-ink { color: var(--paper); }
 .chapter--ink .muted { color: var(--muted-on-ink); }
 .chapter-head { margin-bottom: 48px; display: grid; gap: 16px; }
@@ -624,7 +623,7 @@ html:not([data-nav='plain'])::view-transition-new(root) {
   animation: vt-wipe 450ms var(--ease-in-out) 180ms both;
 }
 
-/* Working screens (/agendar, /admin) and reduced motion: a plain 150ms cross-fade. */
+/* Working screens (/agendar, /conta) and reduced motion: a plain 150ms cross-fade. */
 html[data-nav='plain']::view-transition-old(root) { mix-blend-mode: normal; animation: vt-fade-out 150ms linear both; }
 html[data-nav='plain']::view-transition-new(root) { mix-blend-mode: normal; animation: vt-fade-in 150ms linear both; }
 @media (prefers-reduced-motion: reduce) {

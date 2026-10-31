@@ -17,7 +17,7 @@ let navKind: NavKind = 'curtain';
 let pendingSwitch: NavKind | null = null;
 const reducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-const PLAIN_ROUTES = ['/agendar', '/admin', '/conta'];
+const PLAIN_ROUTES = ['/agendar', '/conta'];
 const introSeen = () => {
   try { return !!sessionStorage.getItem('cintila-intro'); } catch { return true; }
 };
@@ -184,7 +184,7 @@ function teardownPage() {
   stopMotion = null;
 }
 
-// Pages into the working screens (booking, admin) get a plain cross-fade; the rest get the curtain.
+// Pages into the working screens (booking, account) get a plain cross-fade; the rest get the curtain.
 document.addEventListener('astro:before-preparation', (e) => {
   const to = (e as unknown as { to: URL }).to;
   if (pendingSwitch) {

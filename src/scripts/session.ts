@@ -59,7 +59,6 @@ export const clearAccount = () => remove(ACCOUNT);
 
 export const getBookings = () => read<Reserva[]>(BOOKINGS) ?? [];
 export const addBooking = (r: Reserva) => write(BOOKINGS, [...getBookings(), r]);
-export const clearBookings = () => remove(BOOKINGS);
 
 export const getPro = () => read<ProState>(PRO) ?? { status: {}, days: {} };
 export const savePro = (s: ProState) => write(PRO, s);
