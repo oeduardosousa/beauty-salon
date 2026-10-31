@@ -9,8 +9,11 @@ export interface Account {
   criadaEm: string;
 }
 
+/** Where an appointment stands in the professional view. */
+export type Status = 'pendente' | 'confirmado' | 'concluido';
+
 export interface ProState {
-  status: Record<string, string>;
+  status: Record<string, Status>;
   days: Record<string, boolean>;
 }
 
@@ -30,10 +33,16 @@ export interface Reserva {
   criadaEm: string;
 }
 
-const ROLE = 'cintila-role';
-const ACCOUNT = 'cintila-conta';
-const BOOKINGS = 'cintila-reservas';
-const PRO = 'cintila-pro';
+// Every sessionStorage key the site uses. Base.astro's inline script reads ROLE and INTRO by their literal
+// strings (it runs before any module loads), so keep those two in sync with it.
+export const STORAGE_KEYS = {
+  role: 'cintila-role',
+  intro: 'cintila-intro',
+  account: 'cintila-conta',
+  bookings: 'cintila-reservas',
+  pro: 'cintila-pro',
+} as const;
+const { role: ROLE, intro: INTRO, account: ACCOUNT, bookings: BOOKINGS, pro: PRO } = STORAGE_KEYS;
 
 function read<T>(key: string): T | null {
   try {
@@ -52,6 +61,12 @@ function remove(key: string) {
 
 export const getRole = () => read<Role>(ROLE);
 export const setRole = (role: Role) => write(ROLE, role);
+
+/** The loader plays once per tab. Storage blocked counts as seen, so it never loops. */
+export const introSeen = () => {
+  try { return !!sessionStorage.getItem(INTRO); } catch { return true; }
+};
+export const markIntroSeen = () => write(INTRO, '1');
 
 export const getAccount = () => read<Account>(ACCOUNT);
 export const saveAccount = (a: Account) => write(ACCOUNT, a);

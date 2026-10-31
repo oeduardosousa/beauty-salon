@@ -2,6 +2,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
 import Lenis from 'lenis';
+import { markIntroSeen } from './session';
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
@@ -81,7 +82,7 @@ export async function initMotion(): Promise<() => void> {
       const finish = () => {
         if (done) return;
         done = true;
-        try { sessionStorage.setItem('cintila-intro', '1'); } catch { /* storage may be blocked */ }
+        markIntroSeen();
         gsap.to(loader, {
           clipPath: 'inset(0 0 100% 0)',
           duration: 0.7,

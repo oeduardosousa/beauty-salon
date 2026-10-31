@@ -3,7 +3,7 @@
 // `astro:page-load` and torn down on `astro:before-swap`.
 import { navigate } from 'astro:transitions/client';
 import { prefersReducedMotion } from './shared';
-import { getRole, setRole, syncAccountLabels, type Role } from './session';
+import { getRole, introSeen, setRole, syncAccountLabels, type Role } from './session';
 // Static on purpose: a dynamic CSS import is injected once, and the router's head swap
 // drops it, leaving the map's tiles unstyled after navigating away and back.
 import 'leaflet/dist/leaflet.css';
@@ -18,9 +18,6 @@ let navKind: NavKind = 'curtain';
 let pendingSwitch: NavKind | null = null;
 
 const PLAIN_ROUTES = ['/agendar', '/conta'];
-const introSeen = () => {
-  try { return !!sessionStorage.getItem('cintila-intro'); } catch { return true; }
-};
 
 function initPage() {
   controller?.abort();

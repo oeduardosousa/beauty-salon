@@ -1,10 +1,10 @@
 // Simulated professional dashboard: appointment statuses and weekly availability, kept in sessionStorage.
 import { prefersReducedMotion, restartAnimation } from './shared';
-import { clearPro, getAccount, getPro, savePro } from './session';
+import { clearPro, getAccount, getPro, savePro, type Status } from './session';
 
-const LABEL: Record<string, string> = { pendente: 'Pendente', confirmado: 'Confirmado', concluido: 'Concluído' };
-const ACTION: Record<string, string> = { pendente: 'Confirmar', confirmado: 'Concluir', concluido: 'Reabrir' };
-const NEXT: Record<string, string> = { pendente: 'confirmado', confirmado: 'concluido', concluido: 'pendente' };
+const LABEL: Record<Status, string> = { pendente: 'Pendente', confirmado: 'Confirmado', concluido: 'Concluído' };
+const ACTION: Record<Status, string> = { pendente: 'Confirmar', confirmado: 'Concluir', concluido: 'Reabrir' };
+const NEXT: Record<Status, Status> = { pendente: 'confirmado', confirmado: 'concluido', concluido: 'pendente' };
 const money = (n: number) => `R$ ${n.toLocaleString('pt-BR')}`;
 
 function init() {
@@ -27,16 +27,16 @@ function init() {
     setStat(stat('revenue'), money(done.reduce((sum, r) => sum + Number(r.dataset.price), 0)));
   }
 
-  function paint(row: HTMLElement, status: string) {
+  function paint(row: HTMLElement, status: Status) {
     row.dataset.status = status;
     row.querySelector('[data-chip]')!.textContent = LABEL[status];
     row.querySelector('[data-act]')!.textContent = ACTION[status];
   }
 
   for (const row of rows) {
-    paint(row, state.status[row.dataset.id!] ?? row.dataset.initial!);
+    paint(row, state.status[row.dataset.id!] ?? (row.dataset.initial as Status));
     row.querySelector('[data-act]')!.addEventListener('click', () => {
-      const next = NEXT[row.dataset.status!];
+      const next = NEXT[row.dataset.status as Status];
       paint(row, next);
       state.status[row.dataset.id!] = next;
       savePro(state);
@@ -72,7 +72,7 @@ function init() {
     clearPro();
     state.status = {};
     state.days = {};
-    for (const row of rows) paint(row, row.dataset.initial!);
+    for (const row of rows) paint(row, row.dataset.initial as Status);
     for (const sw of page.querySelectorAll<HTMLButtonElement>('[data-day]')) {
       const on = sw.dataset.default === 'true';
       sw.setAttribute('aria-checked', String(on));
