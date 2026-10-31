@@ -2,6 +2,7 @@
 // With <ClientRouter /> the document is swapped, not reloaded, so everything is set up on
 // `astro:page-load` and torn down on `astro:before-swap`.
 import { navigate } from 'astro:transitions/client';
+import { prefersReducedMotion } from './shared';
 import { getRole, setRole, syncAccountLabels, type Role } from './session';
 // Static on purpose: a dynamic CSS import is injected once, and the router's head swap
 // drops it, leaving the map's tiles unstyled after navigating away and back.
@@ -15,7 +16,6 @@ type NavKind = 'plain' | 'curtain' | 'role-pro' | 'role-client';
 let navKind: NavKind = 'curtain';
 // Set by the role switch / gateway just before it navigates, so the next transition is the role wipe.
 let pendingSwitch: NavKind | null = null;
-const reducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const PLAIN_ROUTES = ['/agendar', '/conta'];
 const introSeen = () => {
@@ -59,7 +59,7 @@ function initPage() {
       if (document.body.dataset.role === target) { e.preventDefault(); setMenu(false); return; }
       setRole(target);
       pendingSwitch = target === 'profissional' ? 'role-pro' : 'role-client';
-      if (reducedMotion()) return;
+      if (prefersReducedMotion()) return;
       e.preventDefault();
       const group = link.closest<HTMLElement>('.role-switch, .role-cards');
       if (group) {

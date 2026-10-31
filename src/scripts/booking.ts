@@ -1,24 +1,15 @@
 // Booking wizard: four validated steps -> simulated install -> confirmation.
 // Bookings go to sessionStorage only (see session.ts). No backend, nothing leaves the browser.
+import { EMAIL, formatPhone, prefersReducedMotion } from './shared';
 import { addBooking, getAccount, type Reserva } from './session';
 import { OPEN_WEEKDAYS, SLOTS, services, team } from '../data/salon';
 
-const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const DAYS_AHEAD = 14;
-const reducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const pad = (n: number) => String(n).padStart(2, '0');
 const iso = (d: Date) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 const fromIso = (s: string) => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
 const longDate = (s: string) => fromIso(s).toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
-
-function formatPhone(value: string) {
-  const d = value.replace(/\D/g, '').slice(0, 11);
-  if (d.length <= 2) return d ? `(${d}` : '';
-  if (d.length <= 6) return `(${d.slice(0, 2)}) ${d.slice(2)}`;
-  const cut = d.length === 11 ? 7 : 6;
-  return `(${d.slice(0, 2)}) ${d.slice(2, cut)}-${d.slice(cut)}`;
-}
 
 /** A stable pseudo-random "busy" flag so the same slot is always taken or free for the same day. */
 function isBusy(date: string, stylist: string, slot: string) {
@@ -218,7 +209,7 @@ function init() {
       const on = i + 1 === n;
       s.hidden = !on;
       s.classList.remove('is-fwd', 'is-back');
-      if (on && !viaKeyboard && !reducedMotion()) {
+      if (on && !viaKeyboard && !prefersReducedMotion()) {
         void s.offsetWidth; // restart the CSS animation
         s.classList.add(dir === 'fwd' ? 'is-fwd' : 'is-back');
       }
@@ -293,7 +284,7 @@ function init() {
     installing.hidden = false;
     const run = [...installing.querySelectorAll('.bar i')];
     run.forEach((b) => b.classList.remove('is-on'));
-    const total = reducedMotion() ? 0 : 600;
+    const total = prefersReducedMotion() ? 0 : 600;
     const each = total / run.length;
     run.forEach((b, i) => setTimeout(() => { if (!signal.aborted) b.classList.add('is-on'); }, each * (i + 1)));
     setTimeout(() => { if (!signal.aborted) showDone(booking); }, total + 120);

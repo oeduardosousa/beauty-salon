@@ -1,4 +1,5 @@
 // Simulated professional dashboard: appointment statuses and weekly availability, kept in sessionStorage.
+import { prefersReducedMotion, restartAnimation } from './shared';
 import { clearPro, getAccount, getPro, savePro } from './session';
 
 const LABEL: Record<string, string> = { pendente: 'Pendente', confirmado: 'Confirmado', concluido: 'Concluído' };
@@ -16,9 +17,7 @@ function init() {
   function setStat(el: HTMLElement, text: string) {
     if (el.textContent === text) return;
     el.textContent = text;
-    el.classList.remove('is-bump');
-    void el.offsetWidth;
-    el.classList.add('is-bump');
+    restartAnimation(el, 'is-bump');
   }
 
   function totals() {
@@ -91,7 +90,7 @@ function initNav(page: HTMLElement) {
   navController?.abort();
   navController = new AbortController();
   const { signal } = navController;
-  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const reduced = prefersReducedMotion();
   const links = [...document.querySelectorAll<HTMLAnchorElement>('.nav-desktop a[href*="#"], .menu-overlay nav a[href*="#"]')];
   const sections = ['agenda', 'clientes', 'disponibilidade']
     .map((id) => document.getElementById(id))
@@ -105,9 +104,7 @@ function initNav(page: HTMLElement) {
     const to = Math.max(0, Math.min(scrollY + target.getBoundingClientRect().top - pad(), document.documentElement.scrollHeight - innerHeight));
     const arrive = () => {
       spy();
-      target.classList.remove('is-arrived');
-      void target.offsetWidth;
-      target.classList.add('is-arrived');
+      restartAnimation(target, 'is-arrived');
       setTimeout(() => target.classList.remove('is-arrived'), 1100);
     };
     if (reduced || Math.abs(to - from) < 2) { scrollTo(0, to); arrive(); return; }

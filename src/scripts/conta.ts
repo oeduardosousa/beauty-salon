@@ -1,15 +1,7 @@
 // Temporary client account: validated form -> sessionStorage -> account summary. No backend.
+import { EMAIL, formatPhone, restartAnimation } from './shared';
 import { clearAccount, getAccount, getBookings, saveAccount, syncAccountLabels } from './session';
 
-const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-
-function formatPhone(value: string) {
-  const d = value.replace(/\D/g, '').slice(0, 11);
-  if (d.length <= 2) return d ? `(${d}` : '';
-  if (d.length <= 6) return `(${d.slice(0, 2)}) ${d.slice(2)}`;
-  const cut = d.length === 11 ? 7 : 6;
-  return `(${d.slice(0, 2)}) ${d.slice(2, cut)}-${d.slice(cut)}`;
-}
 
 function init() {
   const found = document.querySelector<HTMLElement>('[data-conta]');
@@ -23,9 +15,7 @@ function init() {
   function show(view: HTMLElement, animate: boolean) {
     for (const v of [formView, accountView]) v.hidden = v !== view;
     if (animate) {
-      view.classList.remove('view-enter');
-      void view.offsetWidth; // restart the CSS animation if the view is shown twice in a row
-      view.classList.add('view-enter');
+      restartAnimation(view, 'view-enter'); // restarts even if the view is shown twice in a row
     }
   }
 
