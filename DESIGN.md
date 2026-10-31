@@ -289,7 +289,7 @@ Direction: bold, cinematic, highly dynamic on the reel; almost still on the desk
 | Cursor follower | **GSAP `quickTo`** |
 | Wizard progress blocks | **Plain CSS** |
 
-GSAP and Lenis are new dependencies. CLAUDE.md requires approval before they are added, and this document does not add them. Load them with dynamic imports only on pages that have scenes, and keep them off `/agendar` and `/admin`. Budget: roughly 50 KB gzipped for GSAP core, ScrollTrigger, SplitText and Lenis together (to be measured when installed), with Lighthouse performance at 90 or more on the home page. There is no WebGL or Three.js.
+GSAP and Lenis are new dependencies. CLAUDE.md requires approval before they are added, and this document does not add them. Load them with dynamic imports only on pages that have scenes, and keep them off every page except the home page. Budget: roughly 50 KB gzipped for GSAP core, ScrollTrigger, SplitText and Lenis together (to be measured when installed), with Lighthouse performance at 90 or more on the home page. There is no WebGL or Three.js.
 
 ### Loading animation
 Shown on the first home visit per session only (`sessionStorage`), never on later pages. A full-screen Deep Plum curtain holds a ten-block progress bar, the same shape as the wizard's, filling in discrete steps, with a rolling three-digit counter (000 to 100) in Cormorant. Maximum duration 1.2s, shorter if the page is ready sooner. The curtain exits upward with `clip-path: inset(0 0 100% 0)` over 700ms `--ease-in-out`. The hero is fully rendered beneath it, so the loader never delays the largest paint, and any key press or click skips it.
@@ -324,13 +324,13 @@ Two only: the services track (desktop only, pinned for the length of the cards, 
 Media frames use `overflow: clip` and the image inside moves ±8% of the frame height against the scroll (halved on phones). The collage uses three speed tiers (0.85, 1, 1.15). Strand lines drift at 0.9×. Transform only; no parallax on text.
 
 ### Cursor effects (fine pointers only: `@media (hover: hover) and (pointer: fine)`)
-A 12px ink dot with `mix-blend-mode: difference` follows the pointer through a GSAP `quickTo` spring (duration 0.35). Over media it grows to a 72px rosé circle labelled "Ver"; over CTAs it hides and the CTA gets a magnetic pull (maximum 8px, 250ms return). The cursor is disabled over text inputs, inside dialogs, and on `/agendar` and `/admin`. The system cursor is always left visible.
+A 12px ink dot with `mix-blend-mode: difference` follows the pointer through a GSAP `quickTo` spring (duration 0.35). Over media it grows to a 72px rosé circle labelled "Ver"; over CTAs it hides and the CTA gets a magnetic pull (maximum 8px, 250ms return). The cursor is disabled over text inputs, inside dialogs, and on every page except the home page. The system cursor is always left visible.
 
 ### Hover states
 Wrap every hover animation in `@media (hover: hover) and (pointer: fine)`. Links: underline draws left to right in 220ms ease-out and retracts toward the opposite side. Cards: the image scales to 1.04 over 600ms ease-out. Buttons: ink fill sweep (240ms) and `scale(0.97)` on press (140ms). Nothing keyboard-initiated animates.
 
 ### Page transitions
-Astro `<ClientRouter />` with a custom animation: the outgoing page fades and rises 12px in 180ms; the incoming page is revealed by a rosé curtain that wipes away with `clip-path` over 450ms ease-in-out. A shared `view-transition-name` links a service name on the services page to the wizard's first step. Navigation into `/agendar` and `/admin` is a plain 150ms cross-fade because those are working screens.
+Astro `<ClientRouter />` with a custom animation: the outgoing page fades and rises 12px in 180ms; the incoming page is revealed by a rosé curtain that wipes away with `clip-path` over 450ms ease-in-out. A shared `view-transition-name` links a service name on the services page to the wizard's first step. Navigation into `/agendar` and `/conta` is a plain 150ms cross-fade because those are working screens.
 
 ### Wizard motion (calm)
 - Step change: content slides 12px and fades, 200ms ease-out (Back reverses direction). Skipped for keyboard-initiated step changes: the content swaps instantly and focus moves to the step heading.
