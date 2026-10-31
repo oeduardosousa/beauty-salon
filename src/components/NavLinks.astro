@@ -1,0 +1,14 @@
+---
+// The header links, rendered twice: inline on wide screens and inside the phone menu overlay.
+interface Props {
+  links: { href: string; label: string }[];
+  role: 'cliente' | 'profissional' | 'entrada';
+  /** `bar` gets the `nav-link` class the desktop underline styles rely on; `menu` is plain. */
+  variant: 'bar' | 'menu';
+}
+const { links, role, variant } = Astro.props;
+const linkClass = variant === 'bar' ? 'nav-link' : undefined;
+---
+{links.map((l) => <a class={linkClass} href={l.href}>{l.label}</a>)}
+{role === 'cliente' && <a class={linkClass} href="/conta" data-account-label>Minha conta</a>}
+{role === 'cliente' && <a class={variant === 'bar' ? 'btn' : undefined} href="/agendar">Agendar</a>}

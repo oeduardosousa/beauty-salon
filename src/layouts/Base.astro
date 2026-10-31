@@ -5,6 +5,7 @@ import { ClientRouter } from 'astro:transitions';
 import cormorantUrl from '@fontsource-variable/cormorant/files/cormorant-latin-wght-normal.woff2?url';
 import jostUrl from '@fontsource-variable/jost/files/jost-latin-wght-normal.woff2?url';
 import RoleSwitch from '../components/RoleSwitch.astro';
+import NavLinks from '../components/NavLinks.astro';
 
 interface Props {
   title: string;
@@ -93,9 +94,7 @@ const hasSwitch = role !== 'entrada';
         )}
         {nav.length > 0 && (
           <nav class="nav-desktop label" aria-label="Principal">
-            {nav.map((l) => <a class="nav-link" href={l.href}>{l.label}</a>)}
-            {role === 'cliente' && <a class="nav-link" href="/conta" data-account-label>Minha conta</a>}
-            {role === 'cliente' && <a class="btn" href="/agendar">Agendar</a>}
+            <NavLinks links={nav} role={role} variant="bar" />
           </nav>
         )}
         {nav.length > 0 && (
@@ -110,9 +109,7 @@ const hasSwitch = role !== 'entrada';
         <div class="menu-body">
           <RoleSwitch role={role as 'cliente' | 'profissional'} />
           <nav aria-label="Menu principal">
-            {nav.map((l) => <a href={l.href}>{l.label}</a>)}
-            {role === 'cliente' && <a href="/conta" data-account-label>Minha conta</a>}
-            {role === 'cliente' && <a href="/agendar">Agendar</a>}
+            <NavLinks links={nav} role={role} variant="menu" />
           </nav>
         </div>
         <p class="label muted-on-ink" style="color:var(--muted-on-ink)">Salão fictício · projeto de portfólio</p>
