@@ -68,9 +68,9 @@ export async function initMotion(): Promise<() => void> {
     const tl = gsap.timeline({ defaults: { ease: EASE_OUT } });
     tl.to('.hero .strands path', { strokeDashoffset: 0, duration: 1.6, stagger: 0.06 }, 0)
       .to('.hero .line-inner', { yPercent: 0, duration: 0.8, stagger: 0.07 }, 0.1)
-      .to('.hero-scene', { opacity: 1, scale: 1, duration: 1.2 }, 0.2)
-      .from('.hero-scene .petal i', { scaleY: 0, scaleX: 0.3, duration: 1.3, stagger: { each: 0.035, from: 'end' } }, 0.3)
-      .from('.hero-scene .prop, .hero-scene .spark', { scale: 0, duration: 0.9, stagger: 0.06, ease: 'back.out(1.6)' }, 0.8)
+      .to('.hero-portrait', { opacity: 1, y: 0, duration: 1.2 }, 0.2)
+      .from('.hero-portrait .stage', { scale: 1.12, duration: 1.4 }, 0.2)
+      .from('.hero-portrait .pop', { scale: 0, duration: 0.9, stagger: 0.07, ease: 'back.out(1.6)' }, 0.9)
       .to('.hero [data-intro]', { opacity: 1, y: 0, duration: 0.5, stagger: 0.08 }, 0.4)
       .to('#site-header', { opacity: 1, duration: 0.24 }, 0.9);
     return tl;
@@ -274,14 +274,17 @@ export async function initMotion(): Promise<() => void> {
     if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
     const dot = q('.cursor');
     if (!dot) return;
-    // 3D hero scene: ease toward the pointer so the depth layers shift against each other.
-    const tilt = q('[data-scene-tilt]');
-    if (tilt) {
-      const rx = gsap.quickTo(tilt, 'rotationX', { duration: 0.9, ease: 'power3' });
-      const ry = gsap.quickTo(tilt, 'rotationY', { duration: 0.9, ease: 'power3' });
+    // Hero picture: each layer drifts against the pointer by its data-depth (px), so the flat layers read as depth.
+    const layers = qa('.hero-portrait [data-depth]').map((el) => ({
+      depth: parseFloat(el.dataset.depth ?? '0'),
+      x: gsap.quickTo(el, 'x', { duration: 0.9, ease: 'power3' }),
+      y: gsap.quickTo(el, 'y', { duration: 0.9, ease: 'power3' }),
+    }));
+    if (layers.length) {
       addEventListener('pointermove', (e) => {
-        ry((e.clientX / innerWidth - 0.5) * 22);
-        rx((0.5 - e.clientY / innerHeight) * 14);
+        const nx = e.clientX / innerWidth - 0.5;
+        const ny = e.clientY / innerHeight - 0.5;
+        layers.forEach((l) => { l.x(-nx * l.depth * 2); l.y(-ny * l.depth * 2); });
       }, { signal });
     }
     root.classList.add('cursor-on');
@@ -330,8 +333,8 @@ export async function initMotion(): Promise<() => void> {
   // The hero is fully rendered beneath the loader, so the loader never delays paint.
   gsap.set('.hero [data-intro]', { y: 8 });
   gsap.set('.hero .line-inner', { yPercent: 110 });
-  gsap.set('.hero-scene', { opacity: 0, scale: 0.92 });
-  gsap.set('.hero .display', { visibility: 'visible' });
+  gsap.set('.hero-portrait', { opacity: 0, y: 24 });
+  gsap.set('.hero .display, .hero .frame', { visibility: 'visible' });
   await runLoader();
   if (signal.aborted) return destroy;
   ctx.add(() => {
@@ -340,11 +343,11 @@ export async function initMotion(): Promise<() => void> {
     cursorFx();
   });
   ScrollTrigger.refresh();
-  // The hero scene runs a dozen endless 3D animations; pause them once it scrolls out of view.
-  const heroScene = q('.hero-scene');
-  if (heroScene && 'IntersectionObserver' in window) {
-    const sceneIo = new IntersectionObserver(([en]) => heroScene.classList.toggle('is-paused', !en.isIntersecting));
-    sceneIo.observe(heroScene);
+  // The hero picture runs a handful of endless layer animations; pause them once it scrolls out of view.
+  const heroPortrait = q('.hero-portrait');
+  if (heroPortrait && 'IntersectionObserver' in window) {
+    const sceneIo = new IntersectionObserver(([en]) => heroPortrait.classList.toggle('is-paused', !en.isIntersecting));
+    sceneIo.observe(heroPortrait);
     signal.addEventListener('abort', () => sceneIo.disconnect());
   }
   // Arriving from another page with a hash (e.g. /agendar to /#equipe): glide there.

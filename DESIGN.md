@@ -300,6 +300,7 @@ Starts as the curtain lifts, about 1.8s in total, and the page is usable from th
 1. 0ms: strand lines draw in (stroke-dashoffset, 1600ms, ease-out).
 2. 100ms: the display headline reveals line by line from masked overflow (`yPercent` 110 to 0, 800ms ease-out, 70ms stagger); the serif word lands last.
 3. 200ms: the hero media settles from `scale(1.12)` to `scale(1)` over 1400ms.
+   The hero media is `HeroPortrait`: an original illustrated client in the salon chair, drawn as stacked SVG layers (mirror, glow, hair, cape and face, two front locks, a snipping pair of scissors, falling clippings, sparkles) inside the arch frame. Layers animate with `transform` and `opacity` only (sway, breathe, snip, twinkle), drift against the pointer on fine pointers, pause off screen, and stop under reduced motion. It replaced a CSS 3D flower scene that was too heavy on phones and read as impersonal. To use a real photo later, swap the layers for one image inside the same frame.
 4. 900ms: the nav and the Agendar pill fade and rise 8px, 240ms.
 
 ### Scroll-driven storytelling

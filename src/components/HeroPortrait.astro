@@ -1,0 +1,255 @@
+---
+// Hero picture: an original illustration of an invented client in the salon chair, drawn for the demo.
+// It is a stack of flat SVG layers (no 3D). Each layer animates with transform/opacity only, so the
+// browser composites them on the GPU; motion.ts adds the intro and a small pointer parallax (data-depth).
+const sparks = [
+  { x: '20%', y: '27%', s: 6, d: '0s' },
+  { x: '76%', y: '23%', s: 5, d: '-1.2s' },
+  { x: '11%', y: '56%', s: 4.5, d: '-2.1s' },
+  { x: '88%', y: '50%', s: 5.5, d: '-0.6s' },
+  { x: '60%', y: '12%', s: 4, d: '-1.8s' },
+];
+const clippings = [
+  { x: '63%', y: '63%', d: '0s', r: '-14deg' },
+  { x: '66%', y: '66%', d: '0.18s', r: '20deg' },
+  { x: '61%', y: '68%', d: '0.34s', r: '-32deg' },
+];
+const star = 'M0 -9 C 1 -3, 3 -1, 9 0 C 3 1, 1 3, 0 9 C -1 3, -3 1, -9 0 C -3 -1, -1 -3, 0 -9Z';
+---
+<figure class="frame hero-portrait">
+  <div class="stage" role="img" aria-label="Imagem ilustrativa: uma cliente de cabelo longo e rosado na cadeira do salão, com uma tesoura flutuando ao lado e brilhos ao redor">
+    <div class="pl" data-depth="5">
+      <svg class="layer" viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+        <defs>
+          <radialGradient id="hp-mirror" cx="50%" cy="38%" r="70%">
+            <stop offset="0" stop-color="#6B2C5E" />
+            <stop offset="1" stop-color="#2B0E26" />
+          </radialGradient>
+        </defs>
+        <rect width="400" height="500" fill="#431A3C" />
+        <ellipse cx="200" cy="248" rx="168" ry="226" fill="none" stroke="#E8DAF6" stroke-opacity="0.22" stroke-width="2" />
+        <ellipse cx="200" cy="248" rx="154" ry="212" fill="url(#hp-mirror)" stroke="#F46FA1" stroke-opacity="0.5" stroke-width="3" />
+        <path d="M96 150 C110 112 140 86 176 74" stroke="#FFF5F3" stroke-opacity="0.22" stroke-width="7" stroke-linecap="round" fill="none" />
+        <path d="M84 188 C86 176 90 166 94 158" stroke="#FFF5F3" stroke-opacity="0.16" stroke-width="5" stroke-linecap="round" fill="none" />
+        <circle cx="338" cy="96" r="30" fill="#F46FA1" opacity="0.4" />
+        <circle cx="64" cy="412" r="20" fill="#E8DAF6" opacity="0.22" />
+      </svg>
+    </div>
+
+    <div class="pl" data-depth="8">
+      <svg class="layer glow" viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+        <defs>
+          <radialGradient id="hp-glow">
+            <stop offset="0" stop-color="#F46FA1" stop-opacity="0.55" />
+            <stop offset="1" stop-color="#F46FA1" stop-opacity="0" />
+          </radialGradient>
+        </defs>
+        <circle cx="200" cy="270" r="190" fill="url(#hp-glow)" />
+      </svg>
+    </div>
+
+    <div class="pl" data-depth="10">
+      <svg class="layer hair-back" viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+        <defs>
+          <linearGradient id="hp-hair" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#5E1535" />
+            <stop offset="0.55" stop-color="#A92A63" />
+            <stop offset="1" stop-color="#F46FA1" />
+          </linearGradient>
+        </defs>
+        <path d="M124 262 C92 168 148 116 202 116 C260 116 310 168 278 262 C308 340 324 420 304 500 L96 500 C76 420 92 340 124 262Z" fill="url(#hp-hair)" />
+        <g stroke="#FF93B9" stroke-width="5" stroke-linecap="round" fill="none" opacity="0.4">
+          <path d="M112 330 C134 362 104 412 128 474" />
+          <path d="M288 330 C266 362 296 412 272 474" />
+          <path d="M150 128 C138 178 150 226 138 270" />
+          <path d="M252 128 C264 178 252 226 264 270" />
+        </g>
+      </svg>
+    </div>
+
+    <div class="pl" data-depth="14">
+      <svg class="layer body" viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+        <!-- neck -->
+        <path d="M170 318 H230 V398 C230 412 170 412 170 398Z" fill="#C2855F" />
+        <!-- salon cape -->
+        <path d="M22 520 L22 500 C32 420 112 390 200 390 C288 390 368 420 378 500 L378 520Z" fill="#E8DAF6" />
+        <path d="M70 500 C82 450 130 424 168 418 M330 500 C318 450 270 424 232 418 M200 424 C200 450 198 478 194 500" stroke="#C9B3E6" stroke-width="4" fill="none" stroke-linecap="round" />
+        <path d="M146 390 C168 416 232 416 254 390 L266 404 C232 436 168 436 134 404Z" fill="#F46FA1" />
+        <circle cx="200" cy="420" r="6" fill="#FFF5F3" />
+        <!-- face -->
+        <path d="M170 372 C186 390 214 390 230 372 V396 H170Z" fill="#B2744F" opacity="0.35" />
+        <ellipse cx="200" cy="268" rx="62" ry="78" fill="#D9A07C" />
+        <ellipse cx="139" cy="278" rx="9" ry="14" fill="#D9A07C" />
+        <ellipse cx="261" cy="278" rx="9" ry="14" fill="#D9A07C" />
+        <circle cx="139" cy="284" r="3.2" fill="#FFF5F3" />
+        <circle cx="261" cy="284" r="3.2" fill="#FFF5F3" />
+        <path d="M200 280 C193 296 192 304 200 308" stroke="#B2744F" stroke-width="3" fill="none" stroke-linecap="round" />
+        <path d="M166 268 q11 9 22 0 M212 268 q11 9 22 0" stroke="#2B0E26" stroke-width="3.5" fill="none" stroke-linecap="round" />
+        <path d="M162 252 q14 -9 28 -2 M210 250 q14 -7 28 2" stroke="#5E1535" stroke-width="4" fill="none" stroke-linecap="round" />
+        <circle cx="160" cy="298" r="11" fill="#F46FA1" opacity="0.32" />
+        <circle cx="240" cy="298" r="11" fill="#F46FA1" opacity="0.32" />
+        <path d="M184 325 q16 13 32 0 q-16 -6 -32 0Z" fill="#C8365F" />
+        <!-- fringe -->
+        <path d="M132 270 C116 176 166 136 210 138 C256 142 288 190 268 270 C260 222 234 192 194 188 C160 194 140 226 132 270Z" fill="#6E1A3F" />
+        <path d="M208 142 C198 160 194 176 192 190" stroke="#E8528C" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.6" />
+        <path d="M150 218 C156 196 170 182 188 174 M252 220 C246 198 232 184 218 176" stroke="#E8528C" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.45" />
+      </svg>
+    </div>
+
+    <div class="pl" data-depth="18">
+      <svg class="layer lock lock--l" viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+        <defs>
+          <linearGradient id="hp-lock" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#7A1F3D" />
+            <stop offset="1" stop-color="#E8528C" />
+          </linearGradient>
+        </defs>
+        <path d="M130 276 C106 328 110 410 128 478 C152 444 162 398 158 340 C154 308 144 286 130 276Z" fill="url(#hp-lock)" />
+        <path d="M132 304 C120 350 124 410 134 450" stroke="#FFB3CF" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.6" />
+      </svg>
+    </div>
+    <div class="pl" data-depth="18">
+      <svg class="layer lock lock--r" viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+        <path d="M270 276 C294 328 290 410 272 478 C248 444 238 398 242 340 C246 308 256 286 270 276Z" fill="url(#hp-lock)" />
+        <path d="M268 304 C280 350 276 410 266 450" stroke="#FFB3CF" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.6" />
+      </svg>
+    </div>
+
+    <div class="pl" data-depth="30">
+      <div class="scissors pop" style="left:64%;top:57%">
+        <div class="flip">
+          <svg class="blade blade--a" viewBox="0 0 120 120" aria-hidden="true" focusable="false">
+            <g fill="none" stroke-linecap="round">
+              <path d="M50 62 L106 14" stroke="#FFF5F3" stroke-width="7" />
+              <circle cx="28" cy="40" r="16" stroke="#F46FA1" stroke-width="7" />
+              <path d="M34 50 L50 62" stroke="#F46FA1" stroke-width="6" />
+            </g>
+          </svg>
+          <svg class="blade blade--b" viewBox="0 0 120 120" aria-hidden="true" focusable="false">
+            <g fill="none" stroke-linecap="round">
+              <path d="M50 62 L106 108" stroke="#E8DAF6" stroke-width="7" />
+              <circle cx="28" cy="84" r="16" stroke="#F46FA1" stroke-width="7" />
+              <path d="M34 74 L50 62" stroke="#F46FA1" stroke-width="6" />
+            </g>
+          </svg>
+          <svg class="screw" viewBox="0 0 120 120" aria-hidden="true" focusable="false"><circle cx="50" cy="62" r="4.5" fill="#2B0E26" /></svg>
+        </div>
+      </div>
+      {clippings.map((c) => (
+        <svg class="clip" viewBox="0 0 14 30" style={`left:${c.x};top:${c.y};--r:${c.r};animation-delay:${c.d}`} aria-hidden="true" focusable="false">
+          <path d="M7 1 C 1 10, 13 20, 7 29" />
+        </svg>
+      ))}
+    </div>
+
+    <div class="pl" data-depth="36">
+      {sparks.map((s) => (
+        <svg class="spark pop" viewBox="-10 -10 20 20" style={`left:${s.x};top:${s.y};width:${s.s}%;animation-delay:${s.d}`} aria-hidden="true" focusable="false">
+          <path d={star} />
+        </svg>
+      ))}
+    </div>
+  </div>
+  <figcaption class="tag-ph">Imagem ilustrativa</figcaption>
+</figure>
+
+<style>
+  .hero-portrait {
+    --h: 52svh;
+    position: relative;
+    width: min(100%, calc(var(--h) * 0.8));
+    margin-inline: auto;
+    aspect-ratio: 4 / 5;
+    background: #431a3c;
+    box-shadow: 0 30px 70px rgb(43 14 38 / 0.28);
+  }
+  .stage { position: absolute; inset: 0; }
+  .pl { position: absolute; inset: 0; }
+  .layer { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+  /* Every endless animation below touches only transform-like properties and opacity. */
+  .glow { animation: glow 6s ease-in-out infinite; }
+  .hair-back { transform-origin: 50% 24%; animation: sway 8s ease-in-out infinite; }
+  .body { animation: breathe 5s ease-in-out infinite; }
+  .lock--l { transform-origin: 32% 56%; animation: sway 6.5s ease-in-out -1.5s infinite; }
+  .lock--r { transform-origin: 68% 56%; animation: sway 7.2s ease-in-out -3.4s infinite; }
+
+  .scissors {
+    position: absolute;
+    width: 30%;
+    aspect-ratio: 1;
+    animation: float 5s ease-in-out infinite;
+    filter: drop-shadow(0 10px 14px rgb(43 14 38 / 0.4));
+  }
+  .flip { position: absolute; inset: 0; transform: scaleX(-1) rotate(-12deg); }
+  .blade, .screw { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .blade { transform-origin: 41.6% 51.7%; }
+  .blade--a { animation: snip-a 5s ease-in-out infinite; }
+  .blade--b { animation: snip-b 5s ease-in-out infinite; }
+
+  .clip {
+    position: absolute;
+    width: 2.6%;
+    height: auto;
+    fill: none;
+    stroke: #f46fa1;
+    stroke-width: 2.4;
+    stroke-linecap: round;
+    opacity: 0;
+    animation: fall 5s ease-in infinite;
+  }
+
+  .spark {
+    position: absolute;
+    height: auto;
+    fill: #fff5f3;
+    animation: twinkle 2.8s ease-in-out infinite;
+  }
+
+  @keyframes glow { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
+  @keyframes sway {
+    0%, 100% { rotate: -1.2deg; }
+    50% { rotate: 1.4deg; }
+  }
+  @keyframes breathe {
+    0%, 100% { translate: 0 0; }
+    50% { translate: 0 -3px; }
+  }
+  @keyframes float {
+    0%, 100% { translate: 0 0; rotate: 0deg; }
+    50% { translate: 0 -10px; rotate: 4deg; }
+  }
+  /* Two quick snips, then a rest while the clippings fall. */
+  @keyframes snip-a {
+    0%, 34%, 100% { rotate: -11deg; }
+    10%, 26% { rotate: 0deg; }
+    18% { rotate: -11deg; }
+  }
+  @keyframes snip-b {
+    0%, 34%, 100% { rotate: 11deg; }
+    10%, 26% { rotate: 0deg; }
+    18% { rotate: 11deg; }
+  }
+  @keyframes fall {
+    0%, 10% { opacity: 0; translate: 0 0; rotate: var(--r); }
+    14% { opacity: 1; }
+    55% { opacity: 0; translate: 0 90px; rotate: calc(var(--r) * -2); }
+    100% { opacity: 0; translate: 0 90px; }
+  }
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.2; scale: 0.6; }
+    50% { opacity: 1; scale: 1.15; }
+  }
+
+  /* Scrolled out of view (set from motion.ts): stop every endless animation. */
+  .hero-portrait.is-paused :is(.glow, .hair-back, .body, .lock, .scissors, .blade, .clip, .spark) { animation-play-state: paused; }
+
+  @media (min-width: 1024px) {
+    .hero-portrait { --h: 72svh; margin-inline: auto 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .glow, .hair-back, .body, .lock, .scissors, .blade, .clip, .spark { animation: none; }
+    .clip { display: none; }
+    .spark { opacity: 0.8; }
+  }
+</style>
